@@ -46,7 +46,7 @@ namespace GloEpidBot
             var client = SessionsClient.Create();
             
                 var response = client.DetectIntent(
-                    session: new SessionName(projectId, locationId:null, sessionId),
+                    session:  SessionName.FormatProjectSession(projectId,sessionId),
                     queryInput: new QueryInput()
                     {
                         Text = new TextInput()
