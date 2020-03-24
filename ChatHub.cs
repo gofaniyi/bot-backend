@@ -18,9 +18,18 @@ namespace GloEpidBot
 
         public System.Threading.Tasks.Task SendResponse(string message)
         {
-           var result =  DetectIntents.DetectIntentFromTexts("covidboi-puwabf", key, message, "en-US");
+            try
+            {
+                var result = DetectIntents.DetectIntentFromTexts("covidboi-puwabf", key, message, "en-US");
 
-            Clients.Client(key).SendCoreAsync("ReceiveResponse",new object[] {result.FulfillmentMessages,result.FulfillmentText, result.Intent.DisplayName, result.Parameters });
+                Clients.Client(key).SendCoreAsync("ReceiveResponse", new object[] { result.FulfillmentMessages, result.FulfillmentText, result.Intent.DisplayName, result.Parameters });
+            }
+            catch (System.Exception ex)
+            {
+
+                Clients.Client(key).SendCoreAsync("ReceiveResponse", new object[] { ex.Message });
+            }
+          
 
             return System.Threading.Tasks.Task.CompletedTask;
         }
