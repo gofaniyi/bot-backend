@@ -34,17 +34,7 @@ namespace GloEpidBot
             services.AddControllers();
             services.AddSignalR();
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy(MyAllowSpecificOrigins,
-                builder =>
-                {
-                    builder.WithOrigins("http://localhost:3000");
-                    builder.AllowAnyMethod();
-                    builder.AllowAnyHeader();
-                    builder.AllowCredentials();
-                });
-            });
+            services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod()));
 
 
 
@@ -82,7 +72,7 @@ namespace GloEpidBot
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("MyAllowSpecificOrigins");
+            app.UseCors("All");
 
             app.UseHttpsRedirection();
 
