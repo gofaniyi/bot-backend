@@ -28,15 +28,24 @@ namespace GloEpidBot
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddSignalR();
-          
-            services.AddCors(o => o.AddPolicy("All", b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000");
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
+                    builder.AllowCredentials();
+                });
+            });
 
-       
 
 
             var token = Configuration.GetSection("tokenManagement").Get<TokenOptions>();
@@ -73,7 +82,7 @@ namespace GloEpidBot
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("All");
+            app.UseCors("MyAllowSpecificOrigins");
 
             app.UseHttpsRedirection();
 
