@@ -22,7 +22,7 @@ namespace GloEpidBot
             {
                 var result = DetectIntents.DetectIntentFromTexts("covidboi-puwabf", Context.ConnectionId, message, "en-US");
 
-                Clients.Client(key).SendCoreAsync("ReceiveResponse", new object[] { result.FulfillmentMessages, result.FulfillmentText, result.Intent.DisplayName, result.Parameters });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { result.FulfillmentMessages, result.FulfillmentText, result.Intent.DisplayName, result.Parameters });
             }
             catch (System.Exception ex)
             {
