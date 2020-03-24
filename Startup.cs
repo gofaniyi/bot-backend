@@ -82,7 +82,10 @@ namespace GloEpidBot
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
             });
+
+          
         }
     }
 }
