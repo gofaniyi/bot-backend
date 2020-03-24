@@ -27,7 +27,7 @@ namespace GloEpidBot
             catch (System.Exception ex)
             {
 
-                Clients.Client(key).SendCoreAsync("ReceiveResponse", new object[] { ex.Message });
+              Clients.All.SendCoreAsync("ReceiveResponse", new object[] { ex.Message });
             }
           
 
