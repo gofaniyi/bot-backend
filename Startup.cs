@@ -34,7 +34,7 @@ namespace GloEpidBot
             services.AddControllers();
             services.AddSignalR();
 
-            services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod()));
+            services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
 
 
 
