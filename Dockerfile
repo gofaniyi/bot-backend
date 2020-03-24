@@ -1,7 +1,7 @@
 # NuGet restore
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
 WORKDIR /src
-COPY GloEpidBot/*.csproj GloEpidBot/
+COPY *.csproj GloEpidBot/
 RUN dotnet restore
 COPY . .
 
