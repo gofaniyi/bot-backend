@@ -33,7 +33,7 @@ namespace GloEpidBot
             services.AddControllers();
             services.AddSignalR();
           
-            services.AddCors(o => o.AddPolicy("All", b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+            services.AddCors(o => o.AddPolicy("All", b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 
        
@@ -72,6 +72,8 @@ namespace GloEpidBot
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("All");
 
             app.UseHttpsRedirection();
 
