@@ -18,7 +18,7 @@ namespace GloEpidBot.Utilities
             
             client.BaseAddress = new Uri($"https://westus.api.cognitive.microsoft.com");
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Add("Content-Type", "application/json");
+         //   client.DefaultRequestHeaders.Add("Content-Type", "application/json");
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", options.Value.Key);
             
 
