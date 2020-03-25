@@ -42,11 +42,11 @@ namespace GloEpidBot
                 var stringContent = new StringContent(JsonConvert.SerializeObject(msg), Encoding.UTF8, "application/json");
 
 
-                var result = await ExternalService.MakeCallPost(stringContent,options);
-
+                var result = await ExternalService.MakeCallGet(message);
+                
                 var res = JsonConvert.DeserializeObject<LuisResponse>(await result.Content.ReadAsStringAsync());
 
-
+            
 
 
 
@@ -54,9 +54,9 @@ namespace GloEpidBot
                 var quest = Questions[QuestionId];
                 Response response = new Response();
 
-                if (quest.IntentName.ToLower() == res.topScoringIntent.intent.ToLower())
+                if (quest.IntentName.ToLower() == res.prediction.topIntent.ToLower())
                 {
-                    if(res.topScoringIntent.intent == "NoTravelHistoryProvider")
+                    if(res.prediction.topIntent == "NoTravelHistoryProvider")
                     {
                         await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha!" });
                         await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId + 2].quest, QuestionId + 2 });
@@ -82,8 +82,8 @@ namespace GloEpidBot
                 else
                 {
                    
-                        await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "I didn't get that!" });
-                        await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, QuestionId + 1 });
+                        await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "I didn't get that!" , QuestionId});
+                        await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, QuestionId });
                    
                        
                 }
@@ -97,7 +97,7 @@ namespace GloEpidBot
             catch (System.Exception ex)
             {
 
-              await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { ex.Message });
+              await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { ex.Message,  });
             }
           
 
@@ -132,22 +132,27 @@ namespace GloEpidBot
     public class LuisResponse
     {
         public string query { get; set; }
-        public TopScoringIntent topScoringIntent { get; set; }
-        public List<entities> entities { get; set; }
-        public SentimentAnalysis sentimentAnalysis { get; set; }
+        public Prediction prediction { get; set; }
+      
+      //  public SentimentAnalysis sentimentAnalysis { get; set; }
     }
 
-    public class TopScoringIntent
+    public class Prediction
     {
-        public string intent { get; set; }
+        public string topIntent { get; set; }
+        public LuisIntent  intent { get; set; }
+        public entities entities { get; set; }
+    }
+
+    public class LuisIntent
+    {
+        public string name { get; set; }
         public double score { get; set; }
     }
     public class entities
     {
-        public string entity { get; set; }
-        public string type { get; set; }
-        public string startIndex { get; set; }
-        public string endIndex { get; set; }
+        public string [] entity { get; set; }
+      
     }
     public class SentimentAnalysis
     {
