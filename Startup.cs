@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using static GloEpidBot.Model.Domain.TokenOption;
 
 namespace GloEpidBot
 {
@@ -35,13 +34,14 @@ namespace GloEpidBot
             services.AddSignalR();
 
             services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins("https://gleopid.netlify.com", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
-
+            services.AddOptions();
 
 
             var token = Configuration.GetSection("tokenManagement").Get<TokenOptions>();
+            var Luis = Configuration.GetSection("LuisConfig").Get<LuisConfig>();
             var secret = Encoding.ASCII.GetBytes(token.Secret);
             services.AddSingleton(token);
-
+            services.AddSingleton(Luis);
 
             services.AddAuthentication(x =>
             {
