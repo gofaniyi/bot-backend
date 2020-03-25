@@ -25,7 +25,7 @@ namespace GloEpidBot
         {
              key = Context.ConnectionId;
 
-            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Welcome!, What's your Name ?" });
+            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Welcome!, What's your Name ?" ,0});
             return System.Threading.Tasks.Task.CompletedTask;
         }
 
