@@ -46,7 +46,7 @@ namespace GloEpidBot
                     options.UseSqlServer(Configuration.GetConnectionString("AppDbContext"))
   
                 );
-            services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins("https://gleopid.netlify.com", "http://127.0.0.1:3000","https://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+            services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins("https://gleopid.netlify.com", "http://127.0.0.1:3000","http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
             services.AddOptions();
 
             services.AddScoped<IReportRepository, ReportRepository>();
