@@ -55,6 +55,7 @@ namespace GloEpidBot
 =>> Eat healthy  and do not self-medicate";
                 await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { t, Questions[0] });
                 await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { "You can run the assessment test anytime (we recommend daily if you have not been staying indoors). " ,Questions[0]});
+                return System.Threading.Tasks.Task.CompletedTask;
             }
             else if(NextQuestionId  == 35)
             {
@@ -70,6 +71,7 @@ Stay indoors and if you live with others isolate yourself in a room.
 
 Wait for healthcare services to contact you and safely guide you to the nearest treatment center ";
                 await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { t });
+                return System.Threading.Tasks.Task.CompletedTask;
             }
             else
             {
@@ -90,6 +92,16 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                             if (QuestionId == 5) //If question is symptoms
                             {
                                 //extract answer to report class
+                                foreach(var item in answers)
+                                {
+                                    assesment.Symptoms += item;
+                                }
+
+                                if(answers.Length > 2)
+                                {
+                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId] });
+                                }
                             }
                             else
                             {
@@ -101,6 +113,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                                     assesment.PublicPlace = answers[0];
                                 else if (QuestionId == 8)
                                     assesment.CloseContact = answers[0];
+                               
 
                             }
 
@@ -120,34 +133,84 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                     {
 
                         //send to LUIS
-                        var msg = new Message
+
+
+                        if(QuestionId == 10)
                         {
-                            data = message
-                        };
-                        var stringContent = new StringContent(JsonConvert.SerializeObject(msg), Encoding.UTF8, "application/json");
+                            if (!message.Contains('/'))
+                            {
+                                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "OOps, didn't catch that, come again?!", Questions[QuestionId] });
+                                return System.Threading.Tasks.Task.CompletedTask;
+                            }
+                                
+
+                            assesment.PublicPlaces = message;
+                            return System.Threading.Tasks.Task.CompletedTask;
+                        }else if(QuestionId == 6)
+                        {
+                            assesment.SymptomsStart = message;
+
+                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", QuestionId });
+                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId] });
 
 
-                        var result = await ExternalService.MakeCallGet(message);
-
-                        var res = JsonConvert.DeserializeObject<LuisResponse>(await result.Content.ReadAsStringAsync());
 
 
+
+
+
+                            return System.Threading.Tasks.Task.CompletedTask;
+                        }
+
+
+
+
+
+
+
+                        var predictionResult = Luiscalls.GetPredictionAsync(message).Result;
+
+                        var res = predictionResult.Prediction;
+                      
                         await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { res});
-                        if (question.IntentName.ToLower() == res.prediction.topIntent.ToLower())
+                        if (question.IntentName.ToLower() == res.TopIntent.ToLower())
                         {
 
                             //Answer matches question
                             //Get the question type and fix answer into the assesment variable
                             if (QuestionId == 0)
-                                assesment.Name = res.prediction.entities["personName"][0];
+                            {
+                                if (res.Entities.ContainsKey("personName"))
+                                    assesment.Name = res.Entities["personName"].ToString();
+                            }
+                              
                             else if (QuestionId == 1)
-                                assesment.Ocupation = res?.prediction?.entities["occupation"][0];
+                            {
+                                //  assesment.Ocupation = res?.prediction?.entities["occupation"][0];
+                                if (res.Entities.ContainsKey("occupation"))
+                                {
+                                    assesment.Ocupation = res.Entities["occupation"].ToString();
+                                }
+                                   
+                            }
+
                             else if (QuestionId == 2)
-                                assesment.Location = res?.prediction?.entities["geographyV2"][0];
-                            else if (QuestionId == 4)
-                                assesment.HouseAddress = res?.prediction?.entities["address"][0];
-                            else if (QuestionId == 6)
-                                assesment.SymptomsStart = res?.prediction?.entities["datetimeV2"][0];
+                            {
+                                //    assesment.Location = res?.prediction?.entities["geographyV2"][0];
+                                if (res.Entities.ContainsKey("geographyV2"))
+                                {
+                                    var GeoData = (IEnumerable<LuisIntent>)res.Entities["geographyV2"];
+                                    foreach (var item in GeoData)
+                                    {
+                                        assesment.Location += item.value + " ";
+                                    }
+                                }
+                               
+                            }
+
+                           
+                               
+                          
 
 
 
@@ -234,6 +297,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
         public string Name { get; set; }
         public string TravelHistory { get; set; }
         public string PublicPlace { get; set; }
+        public string PublicPlaces { get; set; }
         public string TravelPlaces { get; set; }
         public string CloseContact { get; set; }
         public string Ocupation { get; set; }
@@ -248,26 +312,11 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
         public string message  { get; set; }
         public string QuestionId { get; set; }
     }
-    public class LuisResponse
-    {
-        public string query { get; set; }
-        public Prediction prediction { get; set; }
-      
-      //  public SentimentAnalysis sentimentAnalysis { get; set; }
-    }
-
-    public class Prediction
-    {
-        public string topIntent { get; set; }
-        public Dictionary<string, LuisIntent>  intent { get; set; }
-
-        public Dictionary<string, string[]> entities { get; set; }
-    }
-
+   
     public class LuisIntent
     {
-        public string name { get; set; }
-        public double score { get; set; }
+        public string value { get; set; }
+        public string type  { get; set; }
     }
     public class entities
     {
@@ -315,8 +364,10 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                      IntentName = "TravelHistoryProvider",
                      options = "Yes, No But I know someone who has travelled out, No I haven't travelled out or know anyone who has travelled out".Split(','),
                      HasOptions = true,
-                     NextQuestionYes = 5,
-                     QuestionId =3
+                     NextQuestionYes = 35,
+                     QuestionId =3,
+                     NextQuestionNo =  5
+
                 },
                       new question
                 {
@@ -375,7 +426,15 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                        NextQuestionNo = 35,
                        QuestionId = 9
 
-                }
+                },
+                              new question
+                              {
+                                  quest = "Where did you go (use this format) location/state, location/state",
+                                  IntentName = "TravelHistoryProvider",
+                                  HasOptions = false,
+                                   QuestionId = 10,
+                                    NextQuestionYes = 5
+                              }
                
 
            };
