@@ -24,17 +24,65 @@ namespace GloEpidBot
       public System.Threading.Tasks.Task OnConnectedAsync()
         {
              key = Context.ConnectionId;
+            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Hello I'm Gloepid Bot ", 0 });
+            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Here to help you assess your health, answer your pressing questions about COVID-19and if necessary contact healthcare services", 0 });
+            
+            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Let us start with some basic information", 0 });
+            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Welcome!, What's your Name ?", 0 });
 
-            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Welcome!, What's your Name ?" ,0});
             return System.Threading.Tasks.Task.CompletedTask;
         }
 
 
-        public async System.Threading.Tasks.Task<System.Threading.Tasks.Task> SendResponse(string message, int QuestionId)
+        public async System.Threading.Tasks.Task<System.Threading.Tasks.Task> SendResponse(string [] answers,string  message, int QuestionId)
         {
             try
             {
-               
+
+                //Check if question has options
+
+                var question  = Questions[QuestionId];
+
+                if (question.HasOptions)
+                {
+                    //don't send to LUIS
+
+                    if (answers.Length > 0)//Check if response was returned 
+                    {
+
+                        if(QuestionId == 5) //If question is symptoms
+                        {
+                            //extract answer to report class
+                        }
+                        else
+                        {
+                           // answers[0] retrieve answer for report
+                        }
+
+
+
+                    }
+                    else
+                    {
+                        //Resend question
+                    }
+
+                }
+                else
+                {
+
+                    //send to LUIS
+                }
+
+
+                // Send Next Question based on Logic
+
+
+
+
+
+
+
                 var msg = new Message
                 {
                     data = message
@@ -121,6 +169,9 @@ namespace GloEpidBot
     {
         public string IntentName { get; set; }
         public string quest { get; set; }
+        public string [] options { get; set; }
+
+        public bool HasOptions { get; set; }
 
     }
 
@@ -167,32 +218,41 @@ namespace GloEpidBot
                 new question
                 {
                      quest = "What's your name",
-                      IntentName = "NameProvider"
+                      IntentName = "NameProvider",
+                      HasOptions = false
                 },
                 new question
                 {
-                    quest = "Where is your location (General location)",
-                     IntentName = "LocationProvider"
+                    quest = "What do you do?",
+                     IntentName = "OccupationProvider",
+                     HasOptions  = false
                 },
                   new question
                 {
-                    quest = "What is your occupation?",
-                     IntentName = "OccupationProvider"
+                    quest = "What is your current location/where are you right now? Use this format area/city/state",
+                     IntentName = "LocationProvider",
+                     HasOptions = false
                 },
                     new question
                 {
-                    quest = "What is your recent travel history?",
-                     IntentName = "TravelHistoryProvider"
+                    quest = "Have you travelled within or outside country recently?",
+                     IntentName = "TravelHistoryProvider",
+                     options = "Yes, No But I know someone who has travelled out, No I haven't travelled out or know anyone who has travelled out".Split(','),
+                     HasOptions = true
                 },
                       new question
                 {
                     quest = "Where is your House Address ",
-                     IntentName = "HouseAddressProvider"
+                     IntentName = "HouseAddressProvider",
+                     HasOptions = false
                 },
                         new question
                 {
-                    quest = "Do you have any of these symptoms ? Cough, Fever, Difficulty breathing",
-                     IntentName = "SymptomsProvider"
+                    quest = "Have you been experiencing any of the following ?",
+                     IntentName = "SymptomsProvider",
+                     options  = "Dry cough,Fever,Difficulty in breathing,fatigue/tiredness,Sore throat".Split(","),
+                     HasOptions = true
+                     
                 },
                           new question
                 {
@@ -201,24 +261,19 @@ namespace GloEpidBot
                 },
                             new question
                 {
-                    quest = "Have you been self isolating?",
-                     IntentName = "IsolationProvider"
+                    quest = "Have you visited any public space since you first started to notice symptoms? ",
+                     IntentName = "IsolationProvider",
+                     options = "Yes,No".Split(','),
+                     HasOptions = true
                 },
                               new question
                 {
-                    quest = "Have people been visiting you?",
-                     IntentName = "VisitingProvider"
-                },
-                                new question
-                {
-                    quest = "Have you been in contact with someone who just arrived Nigeria?",
-                     IntentName = "ContactProvider"
-                },
-                                  new question
-                {
-                    quest = "Where do you work?",
-                     IntentName = "WorkProvider"
+                    quest = "Have you being in close physical contact with others?",
+                     IntentName = "ContactProvider",
+                       options = "Yes,No".Split(','),
+                       HasOptions = true
                 }
+               
 
            };
 
