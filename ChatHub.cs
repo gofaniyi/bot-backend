@@ -105,7 +105,7 @@ namespace GloEpidBot
         }
     }
 
-    public class Report
+    public class Reporting
     {
         public string Symptoms { get; set; }
         public string Name { get; set; }
