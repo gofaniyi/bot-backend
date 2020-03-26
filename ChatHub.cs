@@ -3,6 +3,8 @@ using GloEpidBot.Utilities;
 using Google.Cloud.Dialogflow.V2;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -41,7 +43,7 @@ namespace GloEpidBot
 
             if (NextQuestionId == 30)
             {
-                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { "You seem to be doing fine at the moment. But stay alert and be cautious." , Questions[0]});
+                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You seem to be doing fine at the moment. But stay alert and be cautious." , Questions[0]});
                 string t = @"Remember to
 
  =>> Wash hands regularly and sanitize
@@ -56,14 +58,14 @@ namespace GloEpidBot
 
 =>> Eat healthy  and do not self-medicate";
 
-                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { t, Questions[0] });
-                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { "You can run the assessment test anytime (we recommend daily if you have not been staying indoors). " ,Questions[0]});
+                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { t, Questions[0] });
+                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You can run the assessment test anytime (we recommend daily if you have not been staying indoors). " ,Questions[0]});
                 return System.Threading.Tasks.Task.CompletedTask;
             }
             else if(NextQuestionId  == 35)
             {
 
-                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { "Ok, I am sending your details to the health care authorities for a follow-up" });
+                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Ok, I am sending your details to the health care authorities for a follow-up", Questions[0] });
                 string t = @"In the meantime kindly do the following 
 
 Remain calm  
@@ -73,7 +75,7 @@ Grant Gloepid permission to upload your data so that I can track and notify thos
 Stay indoors and if you live with others isolate yourself in a room. 
 
 Wait for healthcare services to contact you and safely guide you to the nearest treatment center ";
-                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { t , Questions[0]});
+                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { t , Questions[0]});
                 return System.Threading.Tasks.Task.CompletedTask;
             }
             else
@@ -152,6 +154,8 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                                 
 
                             assesment.PublicPlaces = message;
+                            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
                         }else if(QuestionId == 6)
                         {
@@ -207,8 +211,10 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                                 //    assesment.Location = res?.prediction?.entities["geographyV2"][0];
                                 if (res.Entities.ContainsKey("geographyV2"))
                                 {
-                                    var GeoData = (IEnumerable<LuisIntent>)res.Entities["geographyV2"];
-                                    foreach (var item in GeoData)
+                                    var GeoData = (JArray)res.Entities["geographyV2"];
+                                   var d = GeoData.ToObject<List<LuisIntent>>();
+                           
+                                    foreach (var item in d)
                                     {
                                         assesment.Location += item.value + " ";
                                     }
@@ -374,7 +380,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                      IntentName = "TravelHistoryProvider",
                      options = "Yes, No But I know someone who has travelled out, No I haven't travelled out or know anyone who has travelled out".Split(','),
                      HasOptions = true,
-                     NextQuestionYes = 35,
+                     NextQuestionYes = 10,
                      QuestionId =3,
                      NextQuestionNo =  5
 
@@ -413,7 +419,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                      IntentName = "IsolationProvider",
                      options = "Yes,No".Split(','),
                      HasOptions = true,
-                     NextQuestionYes = 8,
+                     NextQuestionYes = 10,
                      NextQuestionNo = 9,
                      QuestionId = 7
                 },
