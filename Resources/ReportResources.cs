@@ -26,10 +26,4 @@ namespace GloEpidBot.Resources
         [DataType(DataType.Date)]
         public DateTime DateReported { get; set; }
     }
-
-    public class ReportOutput1
-    {  
-      public int Count { get; set; }  
-      public List<ReportResource> Items { get; set; }  
-    }
 }

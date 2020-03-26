@@ -26,10 +26,7 @@ namespace GloEpidBot.Services
         public async Task<SaveReportResponse>  GetReport(int id)
         {
             var report =  await _reportRepository.FindReport(id);
-
-              if (report == null)
-		        return new SaveReportResponse("Report not found.");
-                
+             
             return report;
         }
     }

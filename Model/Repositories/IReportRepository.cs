@@ -11,6 +11,6 @@ namespace GloEpidBot.Model.Repositories
     {
         Task<IEnumerable<Report>> ListAsync(ReportParameters reportParameters);
         Task<SaveReportResponse> FindReport(int id);
-        //Task<SaveReportResponse> GetReport(int id);
+        
     }
 }
