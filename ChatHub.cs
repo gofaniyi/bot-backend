@@ -224,7 +224,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                         else
                         {
                              Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "I didn't get that!", Questions[QuestionId] });
-                          //   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, QuestionId });
+                          Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, QuestionId });
 
                         }
 
@@ -235,7 +235,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
 
                     // Send Next Question based on Logic
                      Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId]});
-                 //    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { });
+                     Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
 
 
 
