@@ -26,7 +26,7 @@ namespace GloEpidBot
         {
              key = Context.ConnectionId;
             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Hello I'm Gloepid Bot ", Questions[0] });
-            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Here to help you assess your health, answer your pressing questions about COVID-19and if necessary contact healthcare services", 0 });
+            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Here to help you assess your health, answer your pressing questions about COVID-19and if necessary contact healthcare services", Questions[0] });
             
             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Let us start with some basic information", Questions[0] });
             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Welcome!, What's your Name ?", Questions[0] });
@@ -39,7 +39,7 @@ namespace GloEpidBot
         {
             if(NextQuestionId == 30)
             {
-               await  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { "You seem to be doing fine at the moment. But stay alert and be cautious." });
+               await  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { "You seem to be doing fine at the moment. But stay alert and be cautious." , Questions[0]});
                 string t = @"Remember to
 
  =>> Wash hands regularly and sanitize
@@ -53,8 +53,8 @@ namespace GloEpidBot
 =>> Wipe and disinfect regularly touched surfaces(door knobs, phone, counter tops etc.)
 
 =>> Eat healthy  and do not self-medicate";
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { t });
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { "You can run the assessment test anytime (we recommend daily if you have not been staying indoors). " });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { t, Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse,", new object[] { "You can run the assessment test anytime (we recommend daily if you have not been staying indoors). " ,Questions[0]});
             }
             else if(NextQuestionId  == 35)
             {
