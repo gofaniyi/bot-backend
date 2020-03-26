@@ -23,7 +23,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using static GloEpidBot.Model.Domain.TokenOption;
 
 namespace GloEpidBot
 {
@@ -42,13 +41,13 @@ namespace GloEpidBot
         {
             services.AddControllers();
             services.AddSignalR();
-
-            services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins("https://gleopid.netlify.com", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
-
+            
             services.AddDbContext<AppDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("AppDbContext"))
   
                 );
+            services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins("https://gleopid.netlify.com", "http://127.0.0.1:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+            services.AddOptions();
 
             services.AddScoped<IReportRepository, ReportRepository>();
             services.AddScoped<IReportService, ReportService>();
@@ -65,9 +64,10 @@ namespace GloEpidBot
             services.AddAutoMapper(Assembly.GetAssembly(typeof(ModelToResourceProfile)));
             
             var token = Configuration.GetSection("tokenManagement").Get<TokenOptions>();
+            var Luis = Configuration.GetSection("LuisConfig").Get<LuisConfig>();
             var secret = Encoding.ASCII.GetBytes(token.Secret);
             services.AddSingleton(token);
-
+            services.AddSingleton(Luis);
 
             services.AddAuthentication(x =>
             {

@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 namespace GloEpidBot.Model.Domain
 {
-    public class TokenOption
-    {
+   
         public class TokenOptions
         {
             public string Audience { get; set; }
@@ -17,5 +16,12 @@ namespace GloEpidBot.Model.Domain
 
         }
 
+    public class LuisConfig
+    {
+        public string AppId { get; set; }
+        public string BaseUrl { get; set; }
+        public string Key { get; set; }
     }
+
+    
 }
