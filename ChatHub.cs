@@ -220,6 +220,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
     }
     public class question
     {
+        public int QuestionId { get; set; }
         public string IntentName { get; set; }
         public string quest { get; set; }
         public string [] options { get; set; }
@@ -287,21 +288,24 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                      quest = "What's your name",
                       IntentName = "NameProvider",
                       HasOptions = false,
-                      NextQuestionYes = 1
+                      NextQuestionYes = 1,
+                      QuestionId = 0
                 },
                 new question
                 {
                     quest = "What do you do?",
                      IntentName = "OccupationProvider",
                      HasOptions  = false,
-                     NextQuestionYes = 2
+                     NextQuestionYes = 2,
+                     QuestionId =1
                 },
                   new question
                 {
                     quest = "What is your current location/where are you right now? Use this format area/city/state",
                      IntentName = "LocationProvider",
                      HasOptions = false,
-                     NextQuestionYes =3
+                     NextQuestionYes =3,
+                     QuestionId =2
                      
                 },
                     new question
@@ -310,13 +314,16 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                      IntentName = "TravelHistoryProvider",
                      options = "Yes, No But I know someone who has travelled out, No I haven't travelled out or know anyone who has travelled out".Split(','),
                      HasOptions = true,
-                     NextQuestionYes = 5
+                     NextQuestionYes = 5,
+                     QuestionId =3
                 },
                       new question
                 {
                     quest = "Where is your House Address ",
                      IntentName = "HouseAddressProvider",
-                     HasOptions = false
+                     HasOptions = false,
+                     NextQuestionYes =5,
+                     QuestionId = 4
                 },
                         new question
                 {
@@ -325,7 +332,8 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                      options  = "Dry cough,Fever,Difficulty in breathing,fatigue/tiredness,Sore throat".Split(","),
                      HasOptions = true,
                      NextQuestionYes =6,
-                     NextQuestionNo = 30
+                     NextQuestionNo = 30,
+                     QuestionId =5
                      
                      
                 },
@@ -333,7 +341,9 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                 {
                     quest = "when did the symptoms start?",
                      IntentName = "SymptomsStartProvider",
-                     NextQuestionYes = 7
+                     NextQuestionYes = 7,
+                     HasOptions = false,
+                     QuestionId = 6
                 },
                             new question
                 {
@@ -342,14 +352,16 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                      options = "Yes,No".Split(','),
                      HasOptions = true,
                      NextQuestionYes = 8,
-                     NextQuestionNo = 9
+                     NextQuestionNo = 9,
+                     QuestionId = 7
                 },
                 new question
                 {
                     quest = "What is your current location/where are you right now? Use this format area/city/state",
                      IntentName = "LocationProvider",
                      HasOptions = false,
-                     NextQuestionYes =3
+                     NextQuestionYes =3,
+                     QuestionId = 8
 
                 },
                               new question
@@ -359,7 +371,8 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                        options = "Yes,No".Split(','),
                        HasOptions = true,
                        NextQuestionYes = 35,
-                       NextQuestionNo = 35
+                       NextQuestionNo = 35,
+                       QuestionId = 9
 
                 }
                
