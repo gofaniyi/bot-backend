@@ -107,7 +107,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                                 if(answers.Length > 2)
                                 {
                                      Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
-                                    // Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId] });
+                                    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                                 }
                             }
                             else
@@ -129,7 +129,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                             //Resend question, No answers sent
 
                              Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "OOps, didn't catch that, come again?!", Questions[QuestionId] });
-                           //  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, QuestionId });
+                            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, Questions[QuestionId] });
                         }
 
                     }
@@ -155,7 +155,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                             assesment.SymptomsStart = message;
 
                              Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
-                            // Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId] });
+                             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
 
 
 
@@ -175,7 +175,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                         var predictionResult = Luiscalls.GetPredictionAsync(message).Result;
 
                         var res = predictionResult.Prediction;
-                       Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Hello I'm Gloepid Bot ", Questions[0] });
+                     //  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Hello I'm Gloepid Bot ", Questions[0] });
                     //    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { res});
                        
                         if (question.IntentName.ToLower() == res.TopIntent.ToLower())
