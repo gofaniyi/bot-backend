@@ -139,15 +139,15 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                             //Answer matches question
                             //Get the question type and fix answer into the assesment variable
                             if (QuestionId == 0)
-                                assesment.Name = res?.prediction?.entities?.entity[0];
+                                assesment.Name = res.prediction.entities["personName"][0];
                             else if (QuestionId == 1)
-                                assesment.Ocupation = res?.prediction?.entities?.entity[0];
+                                assesment.Ocupation = res?.prediction?.entities["occupation"][0];
                             else if (QuestionId == 2)
-                                assesment.Location = res?.prediction?.entities?.entity[0];
+                                assesment.Location = res?.prediction?.entities["geographyV2"][0];
                             else if (QuestionId == 4)
-                                assesment.HouseAddress = res?.prediction?.entities?.entity[0];
+                                assesment.HouseAddress = res?.prediction?.entities["address"][0];
                             else if (QuestionId == 6)
-                                assesment.SymptomsStart = res?.prediction?.entities?.entity[0];
+                                assesment.SymptomsStart = res?.prediction?.entities["datetimeV2"][0];
 
 
 
@@ -259,8 +259,9 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
     public class Prediction
     {
         public string topIntent { get; set; }
-        public LuisIntent  intent { get; set; }
-        public entities entities { get; set; }
+        public Dictionary<string, LuisIntent>  intent { get; set; }
+
+        public Dictionary<string, string[]> entities { get; set; }
     }
 
     public class LuisIntent
