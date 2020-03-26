@@ -108,6 +108,8 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                                 {
                                      Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
                                     Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+
+                                    return System.Threading.Tasks.Task.CompletedTask;
                                 }
                             }
                             else
@@ -130,6 +132,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
 
                              Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "OOps, didn't catch that, come again?!", Questions[QuestionId] });
                             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, Questions[QuestionId] });
+                            return System.Threading.Tasks.Task.CompletedTask;
                         }
 
                     }
@@ -225,6 +228,8 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                         {
                              Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "I didn't get that!", Questions[QuestionId] });
                           Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, QuestionId });
+
+                            return System.Threading.Tasks.Task.CompletedTask;
 
                         }
 
