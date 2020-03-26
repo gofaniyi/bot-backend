@@ -132,7 +132,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                         var res = JsonConvert.DeserializeObject<LuisResponse>(await result.Content.ReadAsStringAsync());
 
 
-
+                        await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Response came from LUIS", QuestionId });
                         if (question.IntentName.ToLower() == res.prediction.topIntent.ToLower())
                         {
 
