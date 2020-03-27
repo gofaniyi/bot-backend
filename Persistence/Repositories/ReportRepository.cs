@@ -44,10 +44,6 @@ namespace GloEpidBot.Persistence.Repositories
         }
 
 
-         public async Task<IEnumerable<SelfAssesment>> ListSelfAssessment()
-         {
-             return _context.Assesments.ToList();
-         }
-
+       
     }
 }

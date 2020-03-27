@@ -11,6 +11,5 @@ namespace GloEpidBot.Model.Services
     {
          Task<IEnumerable<Report>> ListAsync(ReportParameters reportParameters);
          Task<SaveReportResponse> GetReport(int id);
-         Task<IEnumerable<SelfAssesment>>  GetSelfAssessment();
-    }
+         }
 }
