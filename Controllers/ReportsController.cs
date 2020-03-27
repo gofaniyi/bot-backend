@@ -7,19 +7,22 @@ using GloEpidBot.Resources;
 using GloEpidBot.Model.Domain;
 using GloEpidBot.Model.Parameters;
 using GloEpidBot.Model.Services.Communication;
+using GloEpidBot.Persistence.Contexts;
 
 namespace GloEpidBot.Controllers
 {
-    [Route("/api/[controller]")]
+    [Route("api/[controller]")]
     public class ReportsController : Controller
     {
         private readonly IReportService _reportService;
         private readonly IMapper _mapper;
+       
         
         public ReportsController(IReportService reportService, IMapper mapper)
         {
             _reportService = reportService;   
             _mapper = mapper;
+          
         }
 
         [HttpGet]
@@ -39,5 +42,7 @@ namespace GloEpidBot.Controllers
             
             return reports;
         }
+
+       
     }
 }

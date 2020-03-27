@@ -1,4 +1,5 @@
 ﻿using GloEpidBot.Model.Domain;
+using GloEpidBot.Persistence.Contexts;
 using GloEpidBot.Utilities;
 using Google.Cloud.Dialogflow.V2;
 using Microsoft.Extensions.Options;
@@ -14,14 +15,17 @@ namespace GloEpidBot
     public class ChatHub : Microsoft.AspNetCore.SignalR.Hub
     {
         private readonly IOptions<LuisConfig> options;
-        public ChatHub(IOptions<LuisConfig> option)
+        private readonly AppDbContext context;
+        public ChatHub(IOptions<LuisConfig> option, AppDbContext db)
         {
             options = option;
+            context = db;
         }
         string key = string.Empty;
         List<question> Questions = DetectIntents.ReturnQuestions();
         Report report = new Report();
-        BotAssesment assesment = new BotAssesment();
+        SelfAssesment assesment = new SelfAssesment();
+        
         
         override
       public System.Threading.Tasks.Task OnConnectedAsync()
@@ -32,6 +36,7 @@ namespace GloEpidBot
             
             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Let us start with some basic information", Questions[0] });
             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Welcome!, What's your Name ?", Questions[0] });
+            assesment.Id = Guid.NewGuid().ToString();
 
             return System.Threading.Tasks.Task.CompletedTask;
         }
@@ -44,38 +49,21 @@ namespace GloEpidBot
             if (NextQuestionId == 30)
             {
                  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You seem to be doing fine at the moment. But stay alert and be cautious." , Questions[0]});
-                string t = @"Remember to
-
- =>> Wash hands regularly and sanitize
-
-=>> Avoid touching your face especially nose, mouth and eyes
-
-=>> Practice social distancing and stay Indoors.
-
-=>> Turn on your Bluetooth when you go out 
-
-=>> Wipe and disinfect regularly touched surfaces(door knobs, phone, counter tops etc.)
-
-=>> Eat healthy  and do not self-medicate";
-
+                string t =DetectIntents.returnString();
                  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { t, Questions[0] });
                  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You can run the assessment test anytime (we recommend daily if you have not been staying indoors). " ,Questions[0]});
+                context.Assesments.Add(assesment);
+                context.SaveChanges();
                 return System.Threading.Tasks.Task.CompletedTask;
             }
             else if(NextQuestionId  == 35)
             {
 
                  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Ok, I am sending your details to the health care authorities for a follow-up", Questions[0] });
-                string t = @"In the meantime kindly do the following 
-
-Remain calm  
-
-Grant Gloepid permission to upload your data so that I can track and notify those you may have been in contact with 
-
-Stay indoors and if you live with others isolate yourself in a room. 
-
-Wait for healthcare services to contact you and safely guide you to the nearest treatment center ";
+                string t = DetectIntents.returnEscalatestring();
                  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { t , Questions[0]});
+                context.Assesments.Add(assesment);
+                context.SaveChanges();
                 return System.Threading.Tasks.Task.CompletedTask;
             }
             else
@@ -232,7 +220,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                         }
                         else
                         {
-                          Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "I didn't get that!", Questions[QuestionId] });
+                          Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "I didn't get that!, Say that again?", Questions[QuestionId] });
                           //Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, Questions[QuestionId] });
 
                             return System.Threading.Tasks.Task.CompletedTask;
@@ -308,21 +296,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
         public bool HasOptions { get; set; }
 
     }
-    public class BotAssesment
-    {
-        public string Name { get; set; }
-        public string TravelHistory { get; set; }
-        public string PublicPlace { get; set; }
-        public string PublicPlaces { get; set; }
-        public string TravelPlaces { get; set; }
-        public string CloseContact { get; set; }
-        public string Ocupation { get; set; }
-        public string Location { get; set; }
-        public string HouseAddress { get; set; }
-        public string Symptoms { get; set; }
-        public string SymptomsStart { get; set; }
-
-    }
+   
     public class Response
     {
         public string message  { get; set; }
@@ -349,7 +323,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
         public static List<question> ReturnQuestions ()
         {
             var Questions = new List<question> {
-                new question
+               new question
                 {
                      quest = "What's your name",
                       IntentName = "NameProvider",
@@ -372,7 +346,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                      HasOptions = false,
                      NextQuestionYes =3,
                      QuestionId =2
-                     
+
                 },
                     new question
                 {
@@ -402,8 +376,8 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                      NextQuestionYes =6,
                      NextQuestionNo = 30,
                      QuestionId =5
-                     
-                     
+
+
                 },
                           new question
                 {
@@ -451,7 +425,7 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
                                    QuestionId = 10,
                                     NextQuestionYes = 5
                               }
-               
+
 
            };
 
@@ -461,42 +435,39 @@ Wait for healthcare services to contact you and safely guide you to the nearest 
 
 
 
-
-
-        public static QueryResult DetectIntentFromTexts(string projectId,
-                                                string sessionId,
-                                                string text,
-                                                string languageCode = "en-US")
+        public static string returnString()
         {
-            var client = SessionsClient.Create();
-            
-                var response = client.DetectIntent(
-                    session:  SessionName.FormatProjectSession(projectId,sessionId),
-                    queryInput: new QueryInput()
-                    {
-                        Text = new TextInput()
-                        {
-                            Text = text,
-                            LanguageCode = languageCode
-                        }
-                    }
-                );
+            string t = @"Remember to
 
-                var queryResult = response.QueryResult;
+ =>> Wash hands regularly and sanitize
 
-                //Console.WriteLine($"Query text: {queryResult.QueryText}");
-                //if (queryResult.Intent != null)
-                //{
-                //    Console.WriteLine($"Intent detected: {queryResult.Intent.DisplayName}");
-                //}
-                //Console.WriteLine($"Intent confidence: {queryResult.IntentDetectionConfidence}");
-                //Console.WriteLine($"Fulfillment text: {queryResult.FulfillmentText}");
-                //Console.WriteLine();
+=>> Avoid touching your face especially nose, mouth and eyes
 
+=>> Practice social distancing and stay Indoors.
 
-            
+=>> Turn on your Bluetooth when you go out 
 
-            return queryResult;
+=>> Wipe and disinfect regularly touched surfaces(door knobs, phone, counter tops etc.)
+
+=>> Eat healthy  and do not self-medicate";
+            return t;
         }
+
+        public static string returnEscalatestring()
+        {
+          string t =  @"In the meantime kindly do the following 
+
+Remain calm  
+
+Grant Gloepid permission to upload your data so that I can track and notify those you may have been in contact with 
+
+Stay indoors and if you live with others isolate yourself in a room. 
+
+Wait for healthcare services to contact you and safely guide you to the nearest treatment center ";
+
+
+            return t;
+        }
+      
     }
 }
