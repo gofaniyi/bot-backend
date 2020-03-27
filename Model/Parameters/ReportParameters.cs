@@ -5,15 +5,17 @@ namespace GloEpidBot.Model.Parameters
 {
     public class ReportParameters : QueryStringParameters
     {
-        public string RiskStatus { get; set; }
-        
-        public int MinAge { get; set; }
+        public string SearchString { get; set; }
+       // public string Location { get; set; }
+/*         public int MinAge { get; set; }
 
         public int MaxAge { get; set; }
  
-	    public bool ValidAgeRange => MaxAge > MinAge; 
+	    public bool ValidAgeRange => MaxAge > MinAge;  */
 
-        public string SearchBy { get; set; } = "";  
+       // public bool HaveFilter => !string.IsNullOrEmpty(RiskStatus) || !string.IsNullOrEmpty(Location);
+
+        
 
     }
 }

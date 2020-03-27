@@ -21,6 +21,11 @@ namespace GloEpidBot.Persistence.Repositories
         {
             
             var query = _context.Reports.AsQueryable();
+            if (!string.IsNullOrEmpty(reportParameters.SearchString))
+            {
+                query = query.Where(r => r.RiskStatus.Contains(reportParameters.SearchString) 
+                        || r.Location.Contains(reportParameters.SearchString));  
+            }
             
             return PagedList<Report>.ToPagedList(query,
 		        reportParameters.PageNumber,
