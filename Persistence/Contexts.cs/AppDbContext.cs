@@ -27,7 +27,7 @@ namespace GloEpidBot.Persistence.Contexts
                   RiskStatus = "High",
                   Location = "Cooperative Villas, Ajah",
                   Age = 25,
-                  DateReported = DateTime.Parse("25/03/2020")
+                  DateReported = DateTime.Now
                   },
                 new Report { 
                   Id = 101, 
@@ -36,7 +36,7 @@ namespace GloEpidBot.Persistence.Contexts
                   RiskStatus = "High",
                   Location = "Cooperative Villas, Ajah",
                   Age = 50,
-                  DateReported = DateTime.Parse("24/03/2020")
+                  DateReported = DateTime.Now
                   },
                 new Report { 
                   Id = 102, 
@@ -45,7 +45,7 @@ namespace GloEpidBot.Persistence.Contexts
                   RiskStatus = "low",
                   Location = "Cooperative Villas, Ajah",
                   Age = 70,
-                  DateReported = DateTime.Parse("23/03/2020")
+                  DateReported = DateTime.Now
                   },
                 new Report { 
                   Id = 103, 
@@ -54,7 +54,7 @@ namespace GloEpidBot.Persistence.Contexts
                   RiskStatus = "low",
                   Age = 30,
                   Location = "Cooperative Villas, Ajah",
-                  DateReported = DateTime.Parse("22/03/2020")
+                  DateReported = DateTime.Now
                   },  
                 new Report { 
                   Id = 4, 
@@ -63,7 +63,7 @@ namespace GloEpidBot.Persistence.Contexts
                   RiskStatus = "High",
                   Age = 80,
                   Location = "Cooperative Villas, Ajah",
-                  DateReported = DateTime.Parse("21/03/2020")
+                  DateReported = DateTime.Now
                   }
             );
 

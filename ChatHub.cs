@@ -16,15 +16,17 @@ namespace GloEpidBot
     {
         private readonly IOptions<LuisConfig> options;
         private readonly AppDbContext context;
+       
         public ChatHub(IOptions<LuisConfig> option, AppDbContext db)
         {
             options = option;
             context = db;
+          
         }
         string key = string.Empty;
         List<question> Questions = DetectIntents.ReturnQuestions();
         Report report = new Report();
-        SelfAssesment assesment = new SelfAssesment();
+       
         
         
         override
@@ -36,7 +38,8 @@ namespace GloEpidBot
             
             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Let us start with some basic information", Questions[0] });
             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Welcome!, What's your Name ?", Questions[0] });
-            assesment.Id = Guid.NewGuid().ToString();
+         
+         
 
             return System.Threading.Tasks.Task.CompletedTask;
         }
@@ -52,8 +55,7 @@ namespace GloEpidBot
                 string t =DetectIntents.returnString();
                  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { t, Questions[0] });
                  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You can run the assessment test anytime (we recommend daily if you have not been staying indoors). " ,Questions[0]});
-                context.Assesments.Add(assesment);
-                context.SaveChanges();
+              
                 return System.Threading.Tasks.Task.CompletedTask;
             }
             else if(NextQuestionId  == 35)
@@ -62,8 +64,7 @@ namespace GloEpidBot
                  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Ok, I am sending your details to the health care authorities for a follow-up", Questions[0] });
                 string t = DetectIntents.returnEscalatestring();
                  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { t , Questions[0]});
-                context.Assesments.Add(assesment);
-                context.SaveChanges();
+              
                 return System.Threading.Tasks.Task.CompletedTask;
             }
             else
@@ -86,15 +87,15 @@ namespace GloEpidBot
                         if (answers.Length > 0)//Check if response was returned 
                         {
 
-                            if (QuestionId == 5) //If question is symptoms
+                            if (QuestionId == 6) //If question is symptoms
                             {
                                 //extract answer to report class
                                 foreach(var item in answers)
                                 {
-                                    assesment.Symptoms += item;
+                                   // assesment.Symptoms += item;
                                 }
 
-                                if(answers.Length > 2)
+                                if(answers.Length >= 2)
                                 {
                                      Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
                                     Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
@@ -107,11 +108,23 @@ namespace GloEpidBot
                                 // answers[0] retrieve answer for report
 
                                 if (QuestionId == 3)
-                                    assesment.TravelHistory = answers[0];
+                                {
+
+                                }
+                                    //assesment.TravelHistory = answers[0];
                                 else if (QuestionId == 7)
-                                    assesment.PublicPlace = answers[0];
+                                {
+
+                                }
+                                   // assesment.PublicPlace = answers[0];
                                 else if (QuestionId == 8)
-                                    assesment.CloseContact = answers[0];
+                                {
+
+                                }else if(QuestionId == 9)
+                                {
+
+                                }
+                                   // assesment.CloseContact = answers[0];
                                
 
                             }
@@ -132,7 +145,7 @@ namespace GloEpidBot
                         //send to LUIS
                         
 
-                        if (QuestionId == 10)
+                        if (QuestionId == 4 || QuestionId == 5)
                         {
                             if (!message.Contains('/'))
                             {
@@ -141,13 +154,13 @@ namespace GloEpidBot
                             }
                                 
 
-                            assesment.PublicPlaces = message;
+                        ///    assesment.PublicPlaces = message;
                             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
                             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
-                        }else if(QuestionId == 6)
+                        }else if(QuestionId == 7)
                         {
-                            assesment.SymptomsStart = message;
+                        //    assesment.SymptomsStart = message;
 
                              Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
                              Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
@@ -181,7 +194,11 @@ namespace GloEpidBot
                             if (QuestionId == 0)
                             {
                                 if (res.Entities.ContainsKey("personName"))
-                                    assesment.Name = res.Entities["personName"].ToString();
+                                {
+
+                                }
+                                   // assesmentdata.Add(res.Entities["personName"].ToString());
+                                    //assesment.Name = res.Entities["personName"].ToString();
                             }
                               
                             else if (QuestionId == 1)
@@ -189,7 +206,7 @@ namespace GloEpidBot
                                 //  assesment.Ocupation = res?.prediction?.entities["occupation"][0];
                                 if (res.Entities.ContainsKey("occupation"))
                                 {
-                                    assesment.Ocupation = res.Entities["occupation"].ToString();
+                                   // assesment.Ocupation = res.Entities["occupation"].ToString();
                                 }
                                    
                             }
@@ -204,7 +221,7 @@ namespace GloEpidBot
                            
                                     foreach (var item in d)
                                     {
-                                        assesment.Location += item.value + " ";
+                                       // assesment.Location += item.value + " ";
                                     }
                                 }
                                
@@ -228,7 +245,14 @@ namespace GloEpidBot
                         }
 
                     }
-
+                    
+                    if(NextQuestionId == 10)
+                    {
+                        
+                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[Questions[NextQuestionId].NextQuestionYes].quest, Questions[Questions[NextQuestionId].NextQuestionYes] });
+                        return System.Threading.Tasks.Task.CompletedTask;
+                    }
 
 
 
@@ -354,18 +378,26 @@ namespace GloEpidBot
                      IntentName = "TravelHistoryProvider",
                      options = "Yes, No But I know someone who has travelled out, No I haven't travelled out or know anyone who has travelled out".Split(','),
                      HasOptions = true,
-                     NextQuestionYes = 10,
+                     NextQuestionYes = 4,
                      QuestionId =3,
                      NextQuestionNo =  5
 
                 },
                       new question
                 {
-                    quest = "Where is your House Address ",
-                     IntentName = "HouseAddressProvider",
+                    quest = "Where did you go? Use this format area/city/state",
+                     IntentName = "LocationProvider",
                      HasOptions = false,
-                     NextQuestionYes =5,
+                     NextQuestionYes =6,
                      QuestionId = 4
+                },
+                       new question
+                {
+                    quest = "Where did the person go? Use this format area/city/state",
+                     IntentName = "LocationProvider",
+                     HasOptions = false,
+                     NextQuestionYes =6,
+                     QuestionId = 5
                 },
                         new question
                 {
@@ -373,9 +405,9 @@ namespace GloEpidBot
                      IntentName = "SymptomsProvider",
                      options  = "Dry cough,Fever,Difficulty in breathing,fatigue/tiredness,Sore throat".Split(","),
                      HasOptions = true,
-                     NextQuestionYes =6,
+                     NextQuestionYes =7,
                      NextQuestionNo = 30,
-                     QuestionId =5
+                     QuestionId =6
 
 
                 },
@@ -383,9 +415,9 @@ namespace GloEpidBot
                 {
                     quest = "when did the symptoms start?",
                      IntentName = "SymptomsStartProvider",
-                     NextQuestionYes = 7,
+                     NextQuestionYes = 8,
                      HasOptions = false,
-                     QuestionId = 6
+                     QuestionId = 7
                 },
                             new question
                 {
@@ -393,18 +425,9 @@ namespace GloEpidBot
                      IntentName = "IsolationProvider",
                      options = "Yes,No".Split(','),
                      HasOptions = true,
-                     NextQuestionYes = 10,
-                     NextQuestionNo = 9,
-                     QuestionId = 7
-                },
-                new question
-                {
-                    quest = "What is your current location/where are you right now? Use this format area/city/state",
-                     IntentName = "LocationProvider",
-                     HasOptions = false,
-                     NextQuestionYes =3,
+                     NextQuestionYes = 9,
+                     NextQuestionNo = 10,
                      QuestionId = 8
-
                 },
                               new question
                 {
@@ -419,11 +442,11 @@ namespace GloEpidBot
                 },
                               new question
                               {
-                                  quest = "Where did you go (use this format) location/state, location/state",
+                                  quest = "Great job, the chances of the virus spreading is reduced",
                                   IntentName = "TravelHistoryProvider",
                                   HasOptions = false,
                                    QuestionId = 10,
-                                    NextQuestionYes = 5
+                                    NextQuestionYes = 9
                               }
 
 
