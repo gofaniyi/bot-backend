@@ -29,5 +29,13 @@ namespace GloEpidBot.Services
              
             return report;
         }
+
+        public async Task<IEnumerable<SelfAssesment>>  GetSelfAssessment()
+        {
+            var assessment =  await _reportRepository.ListSelfAssessment();
+             
+            return assessment;
+        }
+
     }
 }

@@ -42,5 +42,12 @@ namespace GloEpidBot.Persistence.Repositories
 
            return new SaveReportResponse(report);
         }
+
+
+         public async Task<IEnumerable<SelfAssesment>> ListSelfAssessment()
+         {
+             return _context.Assesments.ToList();
+         }
+
     }
 }

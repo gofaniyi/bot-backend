@@ -43,6 +43,10 @@ namespace GloEpidBot.Controllers
             return reports;
         }
 
-       
+       public async Task<IEnumerable<SelfAssesment>>  GetSelfAssessment() 
+       {
+            var assesment = await _reportService.GetSelfAssessment();
+            return assesment;
+       }
     }
 }
