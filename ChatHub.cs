@@ -109,7 +109,7 @@ namespace GloEpidBot
 
                                 if (QuestionId == 3)
                                 {
-
+                                   
                                 }
                                     //assesment.TravelHistory = answers[0];
                                 else if (QuestionId == 7)
@@ -186,12 +186,11 @@ namespace GloEpidBot
                      //  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Hello I'm Gloepid Bot ", Questions[0] });
                     //    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { res});
                        
-                        if (question.IntentName.ToLower() == res.TopIntent.ToLower())
-                        {
+                        
 
                             //Answer matches question
                             //Get the question type and fix answer into the assesment variable
-                            if (QuestionId == 0)
+                            if (QuestionId == 0 && res.Entities.ContainsKey("personName"))
                             {
                                 if (res.Entities.ContainsKey("personName"))
                                 {
@@ -201,7 +200,7 @@ namespace GloEpidBot
                                     //assesment.Name = res.Entities["personName"].ToString();
                             }
                               
-                            else if (QuestionId == 1)
+                            else if (QuestionId == 1 && res.Entities.ContainsKey("occupation"))
                             {
                                 //  assesment.Ocupation = res?.prediction?.entities["occupation"][0];
                                 if (res.Entities.ContainsKey("occupation"))
@@ -211,7 +210,7 @@ namespace GloEpidBot
                                    
                             }
 
-                            else if (QuestionId == 2)
+                            else if (QuestionId == 2 && res.Entities.ContainsKey("geographyV2"))
                             {
                                 //    assesment.Location = res?.prediction?.entities["geographyV2"][0];
                                 if (res.Entities.ContainsKey("geographyV2"))
@@ -234,7 +233,7 @@ namespace GloEpidBot
 
 
 
-                        }
+                        
                         else
                         {
                           Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "I didn't get that!, Say that again?", Questions[QuestionId] });
