@@ -36,7 +36,7 @@ namespace GloEpidBot
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+       // readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -46,7 +46,7 @@ namespace GloEpidBot
                     options.UseSqlServer(Configuration.GetConnectionString("AppDbContext"))
   
                 );
-            services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins("https://gleopid.netlify.com", "http://127.0.0.1:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+            services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins("https://gleopid.netlify.com", "http://127.0.0.1:3000","http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
             services.AddOptions();
 
             services.AddScoped<IReportRepository, ReportRepository>();
