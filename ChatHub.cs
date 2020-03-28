@@ -47,9 +47,13 @@ namespace GloEpidBot
             if (NextQuestionId == 30)
             {
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You seem to be doing fine at the moment. But stay alert and be cautious.", Questions[0] });
-                string t = DetectIntents.returnString();
-                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { t, Questions[0] });
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You can run the assessment test anytime (we recommend daily if you have not been staying indoors). ", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Wash hands regularly and sanitize", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Avoid touching your face especially nose, mouth and eyes", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Practice social distancing and stay Indoors", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Turn on your Bluetooth when you go out", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Wipe and disinfect regularly touched surfaces(door knobs, phone, counter tops etc.)", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Eat healthy and do not self-medicate", Questions[0] });
 
                 return System.Threading.Tasks.Task.CompletedTask;
             }
@@ -58,7 +62,11 @@ namespace GloEpidBot
 
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Ok, I am sending your details to the health care authorities for a follow-up", Questions[0] });
                 string t = DetectIntents.returnEscalatestring();
-                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { t, Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "In the meantime kindly do the following", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Remain calm ", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Grant Gloepid permission to upload your data so that I can track and notify those you may have been in contact with", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Stay indoors and if you live with others isolate yourself in a room. ", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Wait for healthcare services to contact you and safely guide you to the nearest treatment center", Questions[0] });
 
                 //var assesment = new SelfAssesment
                 //{
@@ -134,7 +142,36 @@ namespace GloEpidBot
 
                                 else if (QuestionId == 9)
                                 {
+                                   
+
                                     Context.Items.Add("publicplaces", answers[0]);
+                                    if (answers[0] == "No")
+                                    {
+                                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Great job, the chances of the virus spreading is reduced ", Questions[NextQuestionId] });
+                                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+
+                                        return System.Threading.Tasks.Task.CompletedTask;
+                                    }
+                                }
+                                else if (QuestionId == 5)
+                                {
+                                    if(answers[0] == "Yes")
+                                    {
+                                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You have done a great job so far, now I will ask some health related questions ", Questions[NextQuestionId] });
+                                    }
+                                    else
+                                    {
+                                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha!", Questions[NextQuestionId] });
+                                    }
+                                   
+                                    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+                                    return System.Threading.Tasks.Task.CompletedTask;
+                                }
+                                else if (QuestionId == 6)
+                                {
+                                    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You have done a great job so far, now I will ask some health related questions ", Questions[NextQuestionId] });
+                                    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+                                    return System.Threading.Tasks.Task.CompletedTask;
                                 }
                                 else if (QuestionId == 11)
                                 {
@@ -184,17 +221,7 @@ namespace GloEpidBot
                             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
                         }
-                        else if(QuestionId == 5)
-                        {
-                            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
-                            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
-                            return System.Threading.Tasks.Task.CompletedTask;
-                        }else if(QuestionId == 6)
-                        {
-                            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
-                            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
-                            return System.Threading.Tasks.Task.CompletedTask;
-                        }
+                      
 
 
 
@@ -272,6 +299,9 @@ namespace GloEpidBot
                                 }
 
                                 Context.Items.Add("travelhistory", Location);
+                                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You have done a great job so far, now I will ask some health related questions ", Questions[NextQuestionId] });
+                                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+                                return System.Threading.Tasks.Task.CompletedTask;
                             }
                             else
                             {
