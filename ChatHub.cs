@@ -54,21 +54,23 @@ namespace GloEpidBot
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Turn on your Bluetooth when you go out", Questions[0] });
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Wipe and disinfect regularly touched surfaces(door knobs, phone, counter tops etc.)", Questions[0] });
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Eat healthy and do not self-medicate", Questions[0] });
-
+                Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
                 return System.Threading.Tasks.Task.CompletedTask;
             }
             else if (NextQuestionId == 35)
             {
 
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Ok, I am sending your details to the health care authorities for a follow-up", Questions[0] });
-                string t = DetectIntents.returnEscalatestring();
+               
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "In the meantime kindly do the following", Questions[0] });
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Remain calm ", Questions[0] });
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Grant Gloepid permission to upload your data so that I can track and notify those you may have been in contact with", Questions[0] });
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Stay indoors and if you live with others isolate yourself in a room. ", Questions[0] });
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Wait for healthcare services to contact you and safely guide you to the nearest treatment center", Questions[0] });
-             
+               
+
                 //var assesment = new SelfAssesment
+                //{
                 //{
                 //    Name = Context.Items["name"].ToString(),
                 //    CloseContact = Context.Items["closecontact"].ToString(),
@@ -90,7 +92,9 @@ namespace GloEpidBot
                 ass.Id = Guid.NewGuid().ToString();
                 db.Assesments.Add(ass);
                 db.SaveChanges();
+                Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
                 return System.Threading.Tasks.Task.CompletedTask;
+                
             }
             else
             {
@@ -273,7 +277,7 @@ namespace GloEpidBot
                                 }
                                 Context.Items.Add("occupation", Occupation);
                             }
-                            else if (message.Split().Length < 2)
+                            else if (message.Split().Length <= 2)
                             {
                                 Context.Items.Add("occupation", message);
                             }
@@ -530,7 +534,7 @@ namespace GloEpidBot
                        QuestionId =11,
                        HasOptions = true,
                        quest = "Have you being in close physical contact with others",
-                       optionsNextId = "35".Split(','),
+                       optionsNextId = "35,35".Split(','),
                         NextQuestionYes = 35,
                         NextQuestionNo = 35,
                         options = "Yes,No".Split(',')
@@ -544,40 +548,6 @@ namespace GloEpidBot
 
 
 
-
-        public static string returnString()
-        {
-            string t = @"Remember to
-
- =>> Wash hands regularly and sanitize
-
-=>> Avoid touching your face especially nose, mouth and eyes
-
-=>> Practice social distancing and stay Indoors.
-
-=>> Turn on your Bluetooth when you go out 
-
-=>> Wipe and disinfect regularly touched surfaces(door knobs, phone, counter tops etc.)
-
-=>> Eat healthy  and do not self-medicate";
-            return t;
-        }
-
-        public static string returnEscalatestring()
-        {
-            string t = @"In the meantime kindly do the following 
-
-Remain calm  
-
-Grant Gloepid permission to upload your data so that I can track and notify those you may have been in contact with 
-
-Stay indoors and if you live with others isolate yourself in a room. 
-
-Wait for healthcare services to contact you and safely guide you to the nearest treatment center ";
-
-
-            return t;
-        }
 
     }
 }
