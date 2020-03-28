@@ -67,7 +67,7 @@ namespace GloEpidBot
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Grant Gloepid permission to upload your data so that I can track and notify those you may have been in contact with", Questions[0] });
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Stay indoors and if you live with others isolate yourself in a room. ", Questions[0] });
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Wait for healthcare services to contact you and safely guide you to the nearest treatment center", Questions[0] });
-
+             
                 //var assesment = new SelfAssesment
                 //{
                 //    Name = Context.Items["name"].ToString(),
@@ -423,7 +423,7 @@ namespace GloEpidBot
                      QuestionId = 0,
                      HasOptions = false,
                      optionsNextId = "1".Split(','),
-                     quest = "What is your name",
+                     quest = "What is your full name",
                      NextQuestionYes = 1
                 },
                 new question
