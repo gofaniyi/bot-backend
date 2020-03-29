@@ -77,7 +77,7 @@ namespace GloEpidBot
               ass.Symptoms = Symptoms.ToString();
 
 
-
+                //TODO ; Use TryGetValue for the rest of the parameters
                 ass.Name = Context.Items["name"].ToString();
                 ass.Location = Context.Items["location"].ToString();
                 ass.Ocupation = Context.Items["occupation"].ToString();
