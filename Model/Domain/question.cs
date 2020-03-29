@@ -17,5 +17,18 @@ namespace GloEpidBot.Model.Domain
         public bool HasOptions { get; set; }
 
     }
-
+    public class questions
+    {
+        public string questionsId { get; set; }
+        public string question { get; set; }
+        public string response { get; set; }
+        public string score { get; set; }
+    }
+    public class questionsModel
+    {
+     
+        public string question { get; set; }
+        public string response { get; set; }
+        public string score { get; set; }
+    }
 }

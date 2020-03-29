@@ -33,7 +33,7 @@ namespace GloEpidBot.Controllers
             var resources = _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResource>>(reports);
             return resources;
         }
-
+       
         
         [HttpGet("{id}")]
         public async Task<SaveReportResponse>  GetReport(int id)
