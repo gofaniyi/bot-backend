@@ -69,21 +69,15 @@ namespace GloEpidBot
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Wait for healthcare services to contact you and safely guide you to the nearest treatment center", Questions[0] });
                
 
-                //var assesment = new SelfAssesment
-                //{
-                //{
-                //    Name = Context.Items["name"].ToString(),
-                //    CloseContact = Context.Items["closecontact"].ToString(),
-                //    Location = Context.Items["location"].ToString(),
-                //    Ocupation = Context.Items["occupation"].ToString(),
-                //    Symptoms = Context.Items["symptoms"].ToString(),
-                //    SymptomsStart = Context.Items["symptomstart"].ToString(),
-                //    PublicPlace = Context.Items["publicplaces"].ToString(),
-                //    TravelHistory = Context.Items["travelhistory"].ToString(),
-                //    Id = Guid.NewGuid().ToString(),
-                //  //  PublicPlaces = Context.Items["visitedpublicplace"].ToString()
-                //};
+                
+                
                 var ass = new SelfAssesment();
+                object Symptoms = String.Empty;
+              Context.Items.TryGetValue("symptoms", out Symptoms);
+              ass.Symptoms = Symptoms.ToString();
+
+
+
                 ass.Name = Context.Items["name"].ToString();
                 ass.Location = Context.Items["location"].ToString();
                 ass.Ocupation = Context.Items["occupation"].ToString();
