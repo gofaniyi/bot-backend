@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GloEpidBot.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200327102928_AddSelfAssessment")]
-    partial class AddSelfAssessment
+    [Migration("20200329142336_inital")]
+    partial class inital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,7 +58,7 @@ namespace GloEpidBot.Migrations
                         {
                             Id = 100,
                             Age = 25,
-                            DateReported = new DateTime(2020, 3, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateReported = new DateTime(2020, 3, 29, 15, 23, 35, 416, DateTimeKind.Local).AddTicks(5447),
                             Location = "Cooperative Villas, Ajah",
                             ReporterName = "Kenny",
                             RiskStatus = "High",
@@ -68,7 +68,7 @@ namespace GloEpidBot.Migrations
                         {
                             Id = 101,
                             Age = 50,
-                            DateReported = new DateTime(2020, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateReported = new DateTime(2020, 3, 29, 15, 23, 35, 419, DateTimeKind.Local).AddTicks(4506),
                             Location = "Cooperative Villas, Ajah",
                             ReporterName = "Teju",
                             RiskStatus = "High",
@@ -78,7 +78,7 @@ namespace GloEpidBot.Migrations
                         {
                             Id = 102,
                             Age = 70,
-                            DateReported = new DateTime(2020, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateReported = new DateTime(2020, 3, 29, 15, 23, 35, 419, DateTimeKind.Local).AddTicks(4576),
                             Location = "Cooperative Villas, Ajah",
                             ReporterName = "Kenny",
                             RiskStatus = "low",
@@ -88,7 +88,7 @@ namespace GloEpidBot.Migrations
                         {
                             Id = 103,
                             Age = 30,
-                            DateReported = new DateTime(2020, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateReported = new DateTime(2020, 3, 29, 15, 23, 35, 419, DateTimeKind.Local).AddTicks(4580),
                             Location = "Cooperative Villas, Ajah",
                             ReporterName = "Kenny",
                             RiskStatus = "low",
@@ -98,7 +98,7 @@ namespace GloEpidBot.Migrations
                         {
                             Id = 4,
                             Age = 80,
-                            DateReported = new DateTime(2020, 3, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateReported = new DateTime(2020, 3, 29, 15, 23, 35, 419, DateTimeKind.Local).AddTicks(4584),
                             Location = "Cooperative Villas, Ajah",
                             ReporterName = "Tega",
                             RiskStatus = "High",
@@ -147,6 +147,59 @@ namespace GloEpidBot.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Assesments");
+                });
+
+            modelBuilder.Entity("GloEpidBot.Model.Domain.assesment", b =>
+                {
+                    b.Property<string>("assesmentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("evaluationOutcome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("evaluationScore")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("evaluationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("questionsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("source")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("assesmentId");
+
+                    b.HasIndex("questionsId");
+
+                    b.ToTable("GetAssesments");
+                });
+
+            modelBuilder.Entity("GloEpidBot.Model.Domain.questions", b =>
+                {
+                    b.Property<string>("questionsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("question")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("response")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("score")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("questionsId");
+
+                    b.ToTable("questions");
+                });
+
+            modelBuilder.Entity("GloEpidBot.Model.Domain.assesment", b =>
+                {
+                    b.HasOne("GloEpidBot.Model.Domain.questions", "questions")
+                        .WithMany()
+                        .HasForeignKey("questionsId");
                 });
 #pragma warning restore 612, 618
         }
