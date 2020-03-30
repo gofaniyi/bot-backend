@@ -39,7 +39,7 @@ namespace GloEpidBot.Utilities
             {
                 var result = response.ResourceSets[0].Resources[0] as BingMapsRESTToolkit.Location;
 
-                return result.Address + " " + result.Name;
+                return result.Name;
             }
             else
             {

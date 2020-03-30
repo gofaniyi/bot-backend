@@ -46,7 +46,7 @@ namespace GloEpidBot.Model.Domain
                 {
                     QuestionId = 3,
                     HasOptions =true,
-                    quest = "Have you travelled outside country recently? ",
+                    quest = "Have you travelled outside the country recently? ",
                     optionsNextId = "4,5".Split(','),
                     NextQuestionYes = 4,
                     NextQuestionNo = 5,
@@ -151,7 +151,16 @@ namespace GloEpidBot.Model.Domain
                    {
                        QuestionId =13,
                        HasOptions = false,
-                      quest = "Kindly provide your phone number and contact address",
+                      quest = "Kindly provide your phone number",
+                      optionsNextId = "14".Split(','),
+                      NextQuestionNo = 14,
+
+                   },
+                      new question
+                   {
+                       QuestionId =14,
+                       HasOptions = false,
+                      quest = "Kindly provide your  contact address",
                       optionsNextId = "35".Split(','),
                       NextQuestionNo = 35,
 
