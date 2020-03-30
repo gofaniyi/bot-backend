@@ -29,8 +29,9 @@ namespace GloEpidBot.Model.Domain
                     HasOptions =true,
                     options = "Below 0,10-19,20-29,30-39,40-49,50-59,60+".Split(','),
                     quest = "What is your age?",
-                    optionsNextId = "2".Split(','),
-                    NextQuestionYes = 2
+                    optionsNextId = "2,2,2,2,2,2,2".Split(','),
+                    NextQuestionYes = 2,
+                    NextQuestionNo = 2
                 },
                 new question
                 {
@@ -87,7 +88,7 @@ namespace GloEpidBot.Model.Domain
                     QuestionId = 7,
                     HasOptions =true,
                     quest = "Have you been experiencing any of the following (Select all that apply)",
-                    optionsNextId = "8,8".Split(','),
+                    optionsNextId = "8,8,8,8,8".Split(','),
                     NextQuestionYes = 8,
                     NextQuestionNo = 8,
                     options = "Difficulty in breathing,fatigue/tiredness,Sore throat,Cough,Fever, None of the symptoms".Split(','),
@@ -99,7 +100,7 @@ namespace GloEpidBot.Model.Domain
                        QuestionId = 8,
                        HasOptions = true,
                        quest = "Do you have any of the following risk factors?",
-                       optionsNextId = "9".Split(','),
+                       optionsNextId = "9,9,9,9,9,9,9".Split(','),
                        NextQuestionYes = 9,
                        IsMultipleChoice = true,
                        options  = "Fever > 100.0 F, Age >= 60 years,Chronic heart disease, Chronic lung disease, Chronic kidney disease,Receiving immunosuppressive medication, None of the risk factors".Split(',')
