@@ -271,17 +271,27 @@ namespace GloEpidBot
                         {
                             Context.Items.Add("visitedlocation", message);
                             await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "We will need your phone number and accurate address", Questions[NextQuestionId] });
                             await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
                         }
                         else if(QuestionId == 13)
                         {
+                           
                             Context.Items.Add("phone", message);
                             await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
                             await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
                         }
-                      
+                        else if (QuestionId == 14)
+                        {
+
+                            Context.Items.Add("homeaddress", message);
+                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+                            return System.Threading.Tasks.Task.CompletedTask;
+                        }
+
 
 
 
