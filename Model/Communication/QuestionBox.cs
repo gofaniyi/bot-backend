@@ -91,7 +91,7 @@ namespace GloEpidBot.Model.Domain
                     optionsNextId = "8,8,8,8,8".Split(','),
                     NextQuestionYes = 8,
                     NextQuestionNo = 8,
-                    options = "Difficulty in breathing,fatigue/tiredness,Sore throat,Cough,Fever, None of the symptoms".Split(','),
+                    options = "Difficulty in breathing,fatigue/tiredness,Sore throat,Cough,Fever".Split(','),
                     IsMultipleChoice = true
 
                  },
@@ -103,7 +103,7 @@ namespace GloEpidBot.Model.Domain
                        optionsNextId = "9,9,9,9,9,9,9".Split(','),
                        NextQuestionYes = 9,
                        IsMultipleChoice = true,
-                       options  = "Fever > 100.0 F, Age >= 60 years,Chronic heart disease, Chronic lung disease, Chronic kidney disease,Receiving immunosuppressive medication, None of the risk factors".Split(',')
+                       options  = "Fever > 100.0 F, Age >= 60 years,Chronic heart disease, Chronic lung disease, Chronic kidney disease,Receiving immunosuppressive medication".Split(',')
 
                    },
                    new question
