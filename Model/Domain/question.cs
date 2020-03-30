@@ -15,6 +15,7 @@ namespace GloEpidBot.Model.Domain
         public int NextQuestionYes { get; set; }
         public int NextQuestionNo { get; set; }
         public bool HasOptions { get; set; }
+        public bool IsMultipleChoice { get; set; }
 
     }
     public class questions

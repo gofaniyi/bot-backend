@@ -14,6 +14,7 @@ namespace GloEpidBot.Persistence.Contexts
         public DbSet<Report> Reports { get; set; }
         public virtual DbSet<SelfAssesment> Assesments{get;set;}
         public virtual DbSet<assesment> GetAssesments { get; set; }
+        public virtual DbSet<PartnerToken> PartnerTokens { get; set; }
 
          protected override void OnModelCreating(ModelBuilder builder)
         {
