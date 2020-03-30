@@ -19,8 +19,8 @@ namespace GloEpidBot.Utilities
             {
                 Point = new Coordinate
                 {
-                    Latitude = longitude,
-                    Longitude = latitude
+                    Latitude = latitude,
+                    Longitude = longitude
                 },
                 BingMapsKey = APIKEY,
                 IncludeNeighborhood = true,
