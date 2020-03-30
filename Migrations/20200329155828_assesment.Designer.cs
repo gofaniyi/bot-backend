@@ -4,45 +4,22 @@ using GloEpidBot.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GloEpidBot.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200329155828_assesment")]
+    partial class assesment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("GloEpidBot.Model.Domain.PartnerToken", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DateJoined")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PartnerId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PartnerName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PartnerTokens");
-                });
 
             modelBuilder.Entity("GloEpidBot.Model.Domain.Report", b =>
                 {
@@ -81,7 +58,7 @@ namespace GloEpidBot.Migrations
                         {
                             Id = 100,
                             Age = 25,
-                            DateReported = new DateTime(2020, 3, 29, 19, 4, 37, 116, DateTimeKind.Local).AddTicks(7145),
+                            DateReported = new DateTime(2020, 3, 29, 16, 58, 27, 713, DateTimeKind.Local).AddTicks(160),
                             Location = "Cooperative Villas, Ajah",
                             ReporterName = "Kenny",
                             RiskStatus = "High",
@@ -91,7 +68,7 @@ namespace GloEpidBot.Migrations
                         {
                             Id = 101,
                             Age = 50,
-                            DateReported = new DateTime(2020, 3, 29, 19, 4, 37, 118, DateTimeKind.Local).AddTicks(4570),
+                            DateReported = new DateTime(2020, 3, 29, 16, 58, 27, 716, DateTimeKind.Local).AddTicks(1315),
                             Location = "Cooperative Villas, Ajah",
                             ReporterName = "Teju",
                             RiskStatus = "High",
@@ -101,7 +78,7 @@ namespace GloEpidBot.Migrations
                         {
                             Id = 102,
                             Age = 70,
-                            DateReported = new DateTime(2020, 3, 29, 19, 4, 37, 118, DateTimeKind.Local).AddTicks(4622),
+                            DateReported = new DateTime(2020, 3, 29, 16, 58, 27, 716, DateTimeKind.Local).AddTicks(1389),
                             Location = "Cooperative Villas, Ajah",
                             ReporterName = "Kenny",
                             RiskStatus = "low",
@@ -111,7 +88,7 @@ namespace GloEpidBot.Migrations
                         {
                             Id = 103,
                             Age = 30,
-                            DateReported = new DateTime(2020, 3, 29, 19, 4, 37, 118, DateTimeKind.Local).AddTicks(4625),
+                            DateReported = new DateTime(2020, 3, 29, 16, 58, 27, 716, DateTimeKind.Local).AddTicks(1393),
                             Location = "Cooperative Villas, Ajah",
                             ReporterName = "Kenny",
                             RiskStatus = "low",
@@ -121,7 +98,7 @@ namespace GloEpidBot.Migrations
                         {
                             Id = 4,
                             Age = 80,
-                            DateReported = new DateTime(2020, 3, 29, 19, 4, 37, 118, DateTimeKind.Local).AddTicks(4628),
+                            DateReported = new DateTime(2020, 3, 29, 16, 58, 27, 716, DateTimeKind.Local).AddTicks(1396),
                             Location = "Cooperative Villas, Ajah",
                             ReporterName = "Tega",
                             RiskStatus = "High",
@@ -185,9 +162,6 @@ namespace GloEpidBot.Migrations
 
                     b.Property<DateTime>("evaluationTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("publicKey")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("source")
                         .HasColumnType("nvarchar(max)");

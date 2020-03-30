@@ -9,10 +9,11 @@ namespace GloEpidBot.Model.Domain
     {
         public string assesmentId { get; set; }
         public string source { get; set; }
-        public questions questions { get; set; }
+        public List<questions> questions { get; set; }
         public string evaluationScore { get; set; }
         public DateTime evaluationTime { get; set; }
         public string evaluationOutcome { get; set; }
+        public string publicKey { get; set; }
     }
 
     public class assesmentModel

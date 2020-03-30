@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GloEpidBot.Model.Domain;
@@ -23,6 +24,7 @@ namespace GloEpidBot.Controllers
         [Route("api/v1/assessments/id")]
         public IActionResult GetAssesment([FromRoute] string id)
         {
+
             try
             {
                 return Ok(new SingleResponse<assesment>
@@ -105,6 +107,7 @@ namespace GloEpidBot.Controllers
         }
 
         [HttpPost]
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("api/v1/assessments")]
         public IActionResult assesments([FromBody] assesmentModel assesment)
         {
@@ -136,6 +139,10 @@ namespace GloEpidBot.Controllers
 
             try
             {
+                var ass = new assesment();
+                ass.assesmentId = Guid.NewGuid().ToString();
+                ass.evaluationOutcome = assesment.evaluationOutcome;
+                //  ass.
                 return Ok();
             }
             catch (System.Exception ex)

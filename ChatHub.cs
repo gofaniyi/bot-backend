@@ -112,13 +112,29 @@ namespace GloEpidBot
 
                             if (QuestionId == 7) //If question is symptoms
                             {
-                                //extract answer to report class
+                               
                                 string Symptoms = String.Empty;
                                 foreach (var item in answers)
                                 {
                                     Symptoms = Symptoms + "," + item;
                                 }
                                 Context.Items.Add("symptoms", Symptoms);
+                                if (answers.Length >= 2)
+                                {
+                                    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                                    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+
+                                    return System.Threading.Tasks.Task.CompletedTask;
+                                }
+                            }
+                            else if(QuestionId == 8)
+                            {
+                                string RiskFactors  = String.Empty;
+                                foreach (var item in answers)
+                                {
+                                    RiskFactors = RiskFactors + "," + item;
+                                }
+                                Context.Items.Add("riskfactors", RiskFactors);
                                 if (answers.Length >= 2)
                                 {
                                     Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
@@ -136,16 +152,26 @@ namespace GloEpidBot
                                     Context.Items.Add("istravelled", answers[0]);
                                 }
 
-
-
-                                else if (QuestionId == 9)
+                                else if(QuestionId == 1)
+                                {
+                                    Context.Items.Add("age", answers[0]);
+                                }
+            
+                                else if (QuestionId == 10)
                                 {
                                    
 
-                                    Context.Items.Add("publicplaces", answers[0]);
-                                    if (answers[0] == "No")
+                                    Context.Items.Add("selfisolating", answers[0]);
+                                    if (answers[0] == "Yes")
                                     {
                                         Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Great job, the chances of the virus spreading is reduced ", Questions[NextQuestionId] });
+                                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+
+                                        return System.Threading.Tasks.Task.CompletedTask;
+                                    }
+                                    else
+                                    {
+                                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
                                         Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
 
                                         return System.Threading.Tasks.Task.CompletedTask;
@@ -153,29 +179,39 @@ namespace GloEpidBot
                                 }
                                 else if (QuestionId == 5)
                                 {
-                                    if(answers[0] == "Yes")
-                                    {
-                                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You have done a great job so far, now I will ask some health related questions ", Questions[NextQuestionId] });
-                                    }
-                                    else
-                                    {
-                                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha!", Questions[NextQuestionId] });
-                                    }
-                                   
+                                    Context.Items.Add("closecontactcorona", answers[0]);
+                                    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
                                     Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+
                                     return System.Threading.Tasks.Task.CompletedTask;
                                 }
                                 else if (QuestionId == 6)
                                 {
-                                    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You have done a great job so far, now I will ask some health related questions ", Questions[NextQuestionId] });
+                                    Context.Items.Add("closecontactnigeria", answers[0]);
+                                    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
                                     Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+
                                     return System.Threading.Tasks.Task.CompletedTask;
                                 }
                                 else if (QuestionId == 11)
                                 {
-                                    Context.Items.Add("closecontact", answers[0]);
+                                    Context.Items.Add("publicplaces", answers[0]);
+                                    if (answers[0] == "Yes")
+                                    {
+                                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Great job, the chances of the virus spreading is reduced ", Questions[NextQuestionId] });
+                                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+
+                                        return System.Threading.Tasks.Task.CompletedTask;
+                                    }
+                                    else
+                                    {
+                                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                                        Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+
+                                        return System.Threading.Tasks.Task.CompletedTask;
+                                    }
                                 }
-                                // assesment.CloseContact = answers[0];
+                                
 
 
                             }
@@ -198,23 +234,35 @@ namespace GloEpidBot
 
                         if (QuestionId == 2)
                         {
-                          
+                          //TODO : Check location with bing api
                             Context.Items.Add("location", message);
                             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
                             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
+                        }else if(QuestionId == 4)
+                        {
+                            Context.Items.Add("arrivaldate", message);
+                            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+                            return System.Threading.Tasks.Task.CompletedTask;
                         }
-                        else if (QuestionId == 8)
+                        else if (QuestionId == 9)
                         {
                             Context.Items.Add("symptomstart", message);
                             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
                             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
                         }
-
-                        else if(QuestionId == 10)
+                        else if(QuestionId == 12)
                         {
-                           // Context.Items.Add("symptomstart", message);
+                            Context.Items.Add("visitedlocation", message);
+                            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+                            return System.Threading.Tasks.Task.CompletedTask;
+                        }
+                        else if(QuestionId == 13)
+                        {
+                            Context.Items.Add("phone", message);
                             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
                             Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
@@ -258,56 +306,9 @@ namespace GloEpidBot
 
                         }
 
-                        else if (QuestionId == 1)
-                        {
+                     
 
-                            if (res.Entities.ContainsKey("occupation"))
-                            {
-                                var OccupationData = (JArray)res.Entities["occupation"];
-                                string Occupation = String.Empty;
-                                foreach (var data in OccupationData)
-                                {
-                                    Occupation += data;
-                                }
-                                Context.Items.Add("occupation", Occupation);
-                            }
-                            else if (message.Split().Length <= 2)
-                            {
-                                Context.Items.Add("occupation", message);
-                            }
-                            else
-                            {
-                                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "I didn't get that!, Say that again?", Questions[QuestionId] });
-                                return System.Threading.Tasks.Task.CompletedTask;
-                            }
-
-                        }
-
-                        else if (QuestionId == 4)
-                        {
-
-                            if (res.Entities.ContainsKey("geographyV2"))
-                            {
-                                var GeoData = (JArray)res.Entities["geographyV2"];
-                                var d = GeoData.ToObject<List<LuisIntent>>();
-                                string Location = String.Empty;
-                                foreach (var item in d)
-                                {
-                                    Location =Location + " " +  item.value;
-                                }
-
-                                Context.Items.Add("travelhistory", Location);
-                                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You have done a great job so far, now I will ask some health related questions ", Questions[NextQuestionId] });
-                                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
-                                return System.Threading.Tasks.Task.CompletedTask;
-                            }
-                            else
-                            {
-                                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "I didn't get that!, Say that again?", Questions[QuestionId] });
-                                return System.Threading.Tasks.Task.CompletedTask;
-                            }
-
-                        }
+                     
 
 
                         else
