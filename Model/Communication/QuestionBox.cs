@@ -128,7 +128,7 @@ namespace GloEpidBot.Model.Domain
                        QuestionId =10,
                        HasOptions = true,
                        quest = "Have you visited any public space since you first started to notice symptoms?",
-                       optionsNextId = "11,12".Split(','),
+                       optionsNextId = "12,12".Split(','),
                         NextQuestionYes = 11,
                         NextQuestionNo = 12,
                         options = "Yes,No".Split(',')
