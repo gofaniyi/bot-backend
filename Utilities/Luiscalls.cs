@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.CognitiveServices.Language.LUIS.Runtime;
@@ -30,7 +31,13 @@ namespace GloEpidBot.Utilities
         }
 
 
-
+        public static bool IsPhoneNumber(string number)
+        {
+            if (Regex.Match(number, @"^(\+[0-9]{13})$").Success || Regex.Match(number, @"^([0-9]{11})$").Success)
+                return true;
+            else
+                return false;
+        }
 
         public static async Task<PredictionResponse> GetPredictionAsync(string query)
         {

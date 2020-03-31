@@ -28,14 +28,8 @@ namespace GloEpidBot
         {
 
 
-            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Hello I'm Gloepid Bot ", Questions[0] });
-            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Here to help you assess your health, answer your pressing questions about COVID-19and if necessary contact healthcare services", Questions[0] });
-
-            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Let us start with some basic information", Questions[0] });
-            Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Welcome!, What's your  name ?", Questions[0] });
-
-
-
+            Clients.Client(Context.ConnectionId).SendCoreAsync("WelcomeMessage", new object[] { new string[] { "Hello I'm Gloepid Bot", "Here to help you assess your COVID-19 risk factor and know if you need to contact the NCDC.", "Please note that I am an assessment tool and should not be used for diagnostic purposes", "Let’s begin when you are ready" }, Questions[0] });
+        
             return System.Threading.Tasks.Task.CompletedTask;
         }
 
@@ -44,32 +38,53 @@ namespace GloEpidBot
         {
 
 
-            if (NextQuestionId == 30)
+           
+            if (NextQuestionId == 35)
             {
-             await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You seem to be doing fine at the moment. But stay alert and be cautious.", Questions[0] });
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You can run the assessment test anytime (we recommend daily if you have not been staying indoors). ", Questions[0] });
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Wash hands regularly and sanitize", Questions[0] });
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Avoid touching your face especially nose, mouth and eyes", Questions[0] });
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Practice social distancing and stay Indoors", Questions[0] });
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Turn on your Bluetooth when you go out", Questions[0] });
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Wipe and disinfect regularly touched surfaces(door knobs, phone, counter tops etc.)", Questions[0] });
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " =>> Eat healthy and do not self-medicate", Questions[0] });
+                object riskLevel = String.Empty;
+                Context.Items.TryGetValue("risklevel", out riskLevel);
+
+
+                if(riskLevel.ToString() == "high")
+                {
+                   await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Please be patient and wait for NCDC to contact you", Questions[0] });
+                  await  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "In the meantime kindly do the following", Questions[0] });
+                 await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Remain calm ", Questions[0] });
+                 await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Self-Isolate", Questions[0] });
+                 await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Wait for healthcare services to contact you for further information and next steps", Questions[0] });
+
+
+                  await  Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
+                }
+                else
+                {
+                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You may have been exposed. Please self isolate and monitor your health status", Questions[0] });
+                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " if there are any changes to your symptoms, please call a doctor or take the assessment test again", Questions[0] });
+                    await Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
+
+
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 await Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
-                return System.Threading.Tasks.Task.CompletedTask;
-            }
-            else if (NextQuestionId == 35)
-            {
-
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Ok, I am sending your details to the health care authorities for a follow-up", Questions[0] });
-
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "In the meantime kindly do the following", Questions[0] });
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Remain calm ", Questions[0] });
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Grant Gloepid permission to upload your data so that I can track and notify those you may have been in contact with", Questions[0] });
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Stay indoors and if you live with others isolate yourself in a room. ", Questions[0] });
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Wait for healthcare services to contact you and safely guide you to the nearest treatment center", Questions[0] });
 
 
-                await Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
+
+
 
                 var ass = new SelfAssesment();
                 object Symptoms = String.Empty;
@@ -119,30 +134,12 @@ namespace GloEpidBot
                                     Symptoms = Symptoms + "," + item;
                                 }
                                 Context.Items.Add("symptoms", Symptoms);
-                                if (answers.Length >= 2)
-                                {
-                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
-                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
 
-                                    return System.Threading.Tasks.Task.CompletedTask;
-                                }
-                            }
-                            else if(QuestionId == 8)
-                            {
-                                string RiskFactors  = String.Empty;
-                                foreach (var item in answers)
-                                {
-                                    RiskFactors = RiskFactors + "," + item;
-                                }
-                                Context.Items.Add("riskfactors", RiskFactors);
-                                if (answers.Length >= 2)
-                                {
-                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
-                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+                                calculate();
+                                return System.Threading.Tasks.Task.CompletedTask;
 
-                                    return System.Threading.Tasks.Task.CompletedTask;
-                                }
                             }
+                           
                             else
                             {
                                 // answers[0] retrieve answer for report
@@ -157,59 +154,52 @@ namespace GloEpidBot
                                     Context.Items.Add("age", answers[0]);
                                 }
             
-                                else if (QuestionId == 10)
+                                else if (QuestionId == 9)
                                 {
                                    
 
-                                    Context.Items.Add("selfisolating", answers[0]);
-                                    if (answers[0] == "Yes")
-                                    {
-                                        await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Great job, the chances of the virus spreading is reduced ", Questions[NextQuestionId] });
-                                        await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+                                  Context.Items.Add("selfisolating", answers[0]);    
+                                  await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
 
-                                        return System.Threading.Tasks.Task.CompletedTask;
-                                    }
-                                    else
-                                    {
-                                        await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
-                                        await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
-
-                                        return System.Threading.Tasks.Task.CompletedTask;
-                                    }
+                                     
                                 }
+
+
+                                else if (QuestionId == 4)
+                                {
+
+
+                                    Context.Items.Add("closecontactcorona", answers[0]);
+                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+
+
+                                }
+
                                 else if (QuestionId == 5)
                                 {
-                                    Context.Items.Add("closecontactcorona", answers[0]);
-                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                                    Context.Items.Add("closecontactnigeria", answers[0]);
+                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Okay", Questions[NextQuestionId] });
                                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
 
                                     return System.Threading.Tasks.Task.CompletedTask;
                                 }
                                 else if (QuestionId == 6)
                                 {
-                                    Context.Items.Add("closecontactnigeria", answers[0]);
-                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                                    Context.Items.Add("contactsick", answers[0]);
+                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Okay", Questions[NextQuestionId] });
                                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
 
                                     return System.Threading.Tasks.Task.CompletedTask;
                                 }
-                                else if (QuestionId == 11)
+                                else if (QuestionId == 10)
                                 {
                                     Context.Items.Add("publicplaces", answers[0]);
-                                    if (answers[0] == "Yes")
-                                    {
-                                        await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Great job, the chances of the virus spreading is reduced ", Questions[NextQuestionId] });
+                                       
                                         await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
 
                                         return System.Threading.Tasks.Task.CompletedTask;
-                                    }
-                                    else
-                                    {
-                                        await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
-                                        await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
-
-                                        return System.Threading.Tasks.Task.CompletedTask;
-                                    }
+                                   
+                                   
                                 }
                                 
 
@@ -238,7 +228,7 @@ namespace GloEpidBot
                           if(answers.Length == 0)
                             {
                                 Context.Items.Add("location", message);
-                                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Okay", Questions[NextQuestionId] });
                             }
                             else
                             {
@@ -256,21 +246,21 @@ namespace GloEpidBot
                         }else if(QuestionId == 4)
                         {
                             Context.Items.Add("arrivaldate", message);
-                        await    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                        await    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Okay", Questions[NextQuestionId] });
                         await    Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
                         }
                         else if (QuestionId == 9)
                         {
                             Context.Items.Add("symptomstart", message);
-                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Okay", Questions[NextQuestionId] });
                             await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
                         }
                         else if(QuestionId == 12)
                         {
                             Context.Items.Add("visitedlocation", message);
-                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Okay", Questions[NextQuestionId] });
                             await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "We will need your phone number and accurate address", Questions[NextQuestionId] });
                             await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
@@ -278,16 +268,27 @@ namespace GloEpidBot
                         else if(QuestionId == 13)
                         {
                            
-                            Context.Items.Add("phone", message);
-                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
-                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
-                            return System.Threading.Tasks.Task.CompletedTask;
+                            if(Luiscalls.IsPhoneNumber(message))
+                            {
+                                Context.Items.Add("phone", message);
+                                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Okay", Questions[NextQuestionId] });
+                                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+                                return System.Threading.Tasks.Task.CompletedTask;
+                            }
+                            else
+                            {
+                               
+                                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Didn't get that, try again?", Questions[NextQuestionId] });
+                                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+                                return System.Threading.Tasks.Task.CompletedTask;
+                            }
+                           
                         }
                         else if (QuestionId == 14)
                         {
 
                             Context.Items.Add("homeaddress", message);
-                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Okay", Questions[NextQuestionId] });
                             await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
                         }
@@ -349,7 +350,7 @@ namespace GloEpidBot
 
 
                     // Send Next Question based on Logic
-                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Gotcha", Questions[NextQuestionId] });
+                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Okay", Questions[NextQuestionId] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
 
 
@@ -372,7 +373,52 @@ namespace GloEpidBot
             return System.Threading.Tasks.Task.CompletedTask;
         }
 
-        
+        public void calculate()
+        {
+            object travelhistory, symptoms =string.Empty, closecontact, location, contactsick = string.Empty;
+
+            Context.Items.TryGetValue("closecontactcorona", out closecontact);
+            Context.Items.TryGetValue("istravelled", out travelhistory);
+            Context.Items.TryGetValue("contactsick", out contactsick);
+            Context.Items.TryGetValue("location", out location);
+
+            if(travelhistory != null && travelhistory.ToString() != "No" && (symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
+            {
+
+                Context.Items.Add("risklevel", "high");
+
+            }else if(closecontact.ToString() == "Yes" && (symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
+            {
+                Context.Items.Add("risklevel", "high");
+            }
+            else if((symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")) && (location.ToString().Contains("Lagos")|| location.ToString().Contains("Oyo")|| location.ToString().Contains("Abuja"))) {
+                Context.Items.Add("risklevel", "high");
+            }
+            else if(travelhistory.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms"))
+            {
+                Context.Items.Add("risklevel", "medium");
+            }else if(closecontact.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms"))
+            {
+                Context.Items.Add("risklevel", "medium");
+            }else if(contactsick.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms"))
+            {
+                Context.Items.Add("risklevel", "medium");
+            }else if(contactsick.ToString() == "Not to my knowledge" && (symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
+            {
+                Context.Items.Add("risklevel", "medium");
+            }else if((symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
+            {
+                Context.Items.Add("risklevel", "medium");
+            }
+            else
+            {
+                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You seem to be doing fine at the moment. But stay alert and practice social distancing.", Questions[0] });
+                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You can call a doctor if you have any unrelated health issues or questions.", Questions[0] });
+                 
+                Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
+                
+            }
+        }
     }
 
   
