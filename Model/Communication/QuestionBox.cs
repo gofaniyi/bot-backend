@@ -92,9 +92,9 @@ namespace GloEpidBot.Model.Domain
                     QuestionId = 7,
                     HasOptions =true,
                     quest = "Have you been experiencing any of the following (Select all that apply)",
-                    optionsNextId = "8,8,8,8,8,11".Split(','),
+                    optionsNextId = "8,8,8,8,8,12".Split(','),
                     NextQuestionYes = 8,
-                    NextQuestionNo = 9,
+                    NextQuestionNo = 12,
                     options = "Difficulty in breathing,fatigue/tiredness,Sore throat,Dry Cough,Fever > 37.8 C,None of the symptoms".Split(','),
                     IsMultipleChoice = true
 
@@ -137,7 +137,7 @@ namespace GloEpidBot.Model.Domain
                    {
                        QuestionId =11,
                        HasOptions = false,
-                       quest = "Where did you go? (use this format) Area-State (use comma to separate if listing multiple locations) ",
+                       quest = "Where did you go? (use this format) Area,State ",
                       optionsNextId = "12".Split(','),
                        NextQuestionNo = 12,
                        
