@@ -135,7 +135,11 @@ namespace GloEpidBot
                                 }
                                 Context.Items.Add("symptoms", Symptoms);
 
-                                calculate();
+                                int r = calculate();
+                                if(r == 0)
+                                {
+                                    return System.Threading.Tasks.Task.CompletedTask;
+                                }
                                 await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                                 return System.Threading.Tasks.Task.CompletedTask;
 
@@ -161,8 +165,8 @@ namespace GloEpidBot
 
                                   Context.Items.Add("selfisolating", answers[0]);    
                                   await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+                                    return System.Threading.Tasks.Task.CompletedTask;
 
-                                     
                                 }
 
 
@@ -172,7 +176,7 @@ namespace GloEpidBot
 
                                     Context.Items.Add("closecontactcorona", answers[0]);
                                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
-
+                                    return System.Threading.Tasks.Task.CompletedTask;
 
                                 }
 
@@ -383,7 +387,7 @@ namespace GloEpidBot
             return System.Threading.Tasks.Task.CompletedTask;
         }
 
-        public void calculate()
+        public int calculate()
         {
             object travelhistory = string.Empty, symptoms =string.Empty, closecontact = string.Empty, location =  string.Empty, contactsick = string.Empty;
 
@@ -405,29 +409,42 @@ namespace GloEpidBot
             {
 
                 Context.Items.Add("risklevel", "high");
+                return 2;
 
             }else if(closecontact.ToString() == "Yes" && (symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
             {
                 Context.Items.Add("risklevel", "high");
+                return 2;
             }
             else if((symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")) && (location.ToString().Contains("Lagos")|| location.ToString().Contains("Oyo")|| location.ToString().Contains("Abuja"))) {
                 Context.Items.Add("risklevel", "high");
+                return 2;
             }
+
             else if(travelhistory.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms"))
             {
                 Context.Items.Add("risklevel", "medium");
-            }else if(closecontact.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms"))
+                return 1;
+            }
+            else if(closecontact.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms"))
             {
                 Context.Items.Add("risklevel", "medium");
-            }else if(contactsick.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms"))
+                return 1;
+            }
+            else if(contactsick.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms"))
             {
                 Context.Items.Add("risklevel", "medium");
-            }else if(contactsick.ToString() == "Not to my knowledge" && (symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
+                return 1;
+            }
+            else if(contactsick.ToString() == "Not to my knowledge" && (symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
             {
                 Context.Items.Add("risklevel", "medium");
-            }else if((symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
+                return 1;
+            }
+            else if((symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
             {
                 Context.Items.Add("risklevel", "medium");
+                return 1;
             }
             else
             {
@@ -435,7 +452,8 @@ namespace GloEpidBot
                  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You can call a doctor if you have any unrelated health issues or questions.", Questions[0] });
                  
                 Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
-                
+                return 0;
+
             }
         }
     }

@@ -104,7 +104,7 @@ namespace GloEpidBot.Model.Domain
                    {
                        QuestionId = 8,
                        HasOptions =false,
-                       quest = "when did the symptoms start? (day/month)",
+                       quest = "when did the symptoms start? (day/month) - (01/10)",
                        optionsNextId = "10".Split(','),
                        NextQuestionNo = 10,
                        NextQuestionYes = 10
