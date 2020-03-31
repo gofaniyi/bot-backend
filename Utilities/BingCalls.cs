@@ -50,6 +50,7 @@ namespace GloEpidBot.Utilities
 
         public static bool ValidateLocation(string location)
         {
+          
             if (!location.Contains(','))
                 return false;
             var local = location.Split(',');
@@ -60,9 +61,12 @@ namespace GloEpidBot.Utilities
             else
             {
                 var States = "Abia,Adamawa,Akwa Ibom,Anambra,Bauchi,Bayelsa,Benue,Borno,Cross River,Delta,Ebonyi,Edo,Ekiti,Enugu,Abuja,Gombe,Imo,Jigawa,Kaduna,Kano,Katsina,Kebbi,Kogi,Kwara,Lagos,Nasarawa,Niger,Ogun,Ondo,Osun,Oyo,Plateau,Rivers,Sokoto,Taraba,Yobe,Zamfara".Split(',');
-              foreach( var states in States)
+
+                string dstate = string.Empty;
+            dstate =     Regex.Replace(dstate, @"\s+", "");
+              foreach ( var states in States)
                 {
-                    if(local[1].ToString().ToLower() == states.ToLower())
+                    if(dstate.ToString().ToLower() == states.ToLower())
                     {
                         return true;
                     }
