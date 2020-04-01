@@ -19,13 +19,16 @@ namespace GloEpidBot.Model.Domain
     public class assesmentModel
     {
         public string source { get; set; }
+        public string channel { get; set; }
         public List<questionsModel> questions { get; set; }
         public EvaluatedRiskLevel EvaluatedRiskLevel { get; set; }
         public string evaluationScore { get; set; }
         public DateTime evaluationTime { get; set; }
         public string evaluationOutcome { get; set; }
-    }
+        public string publicKey { get; set; }
 
+    }
+   
     public enum EvaluatedRiskLevel
     {
         LowRisk,

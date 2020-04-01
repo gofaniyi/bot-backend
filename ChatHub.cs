@@ -41,13 +41,13 @@ namespace GloEpidBot
            
             if (NextQuestionId == 35)
             {
-                object riskLevel = String.Empty;
-                Context.Items.TryGetValue("risklevel", out riskLevel);
+                object risklevel = string.Empty;
+                Context.Items.TryGetValue("risklevel", out risklevel);
 
-
-                if(riskLevel.ToString() == "high")
+                if (risklevel.ToString() == "high")
                 {
-                   await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Please be patient and wait for NCDC to contact you", Questions[0] });
+                   await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "*High Risk*", Questions[0] });
+                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Please be patient and wait for NCDC to contact you", Questions[0] });
                   await  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "In the meantime kindly do the following", Questions[0] });
                  await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Remain calm ", Questions[0] });
                  await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Self-Isolate", Questions[0] });
@@ -58,6 +58,7 @@ namespace GloEpidBot
                 }
                 else
                 {
+                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "*Medium Risk*", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You may have been exposed. Please self isolate and monitor your health status", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " if there are any changes to your symptoms, please call a doctor or take the assessment test again", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
@@ -66,6 +67,7 @@ namespace GloEpidBot
                 }
 
 
+                
 
 
 
@@ -83,25 +85,12 @@ namespace GloEpidBot
                 await Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
 
 
+                await SendResultAsync();
 
 
 
-                var ass = new SelfAssesment();
-                object Symptoms = String.Empty;
-              Context.Items.TryGetValue("symptoms", out Symptoms);
-              ass.Symptoms = Symptoms.ToString();
 
 
-                //TODO ; Use TryGetValue for the rest of the parameters
-                ass.Name = Context.Items["name"].ToString();
-                ass.Location = Context.Items["location"].ToString();
-                ass.Ocupation = Context.Items["occupation"].ToString();
-                ass.SymptomsStart = Context.Items["symptomstart"].ToString();
-                ass.Symptoms = Context.Items["symptoms"].ToString();
-                ass.Id = Guid.NewGuid().ToString();
-                db.Assesments.Add(ass);
-                db.SaveChanges();
-            
                 return System.Threading.Tasks.Task.CompletedTask;
                 
             }
@@ -387,6 +376,99 @@ namespace GloEpidBot
             return System.Threading.Tasks.Task.CompletedTask;
         }
 
+        public async System.Threading.Tasks.Task SendResultAsync()
+        {
+            object symptoms = string.Empty, istravelled = string.Empty, age = string.Empty, selfisolating = string.Empty, closecontactcorona = string.Empty, closecontactnigeria = string.Empty, contactsick = string.Empty, publicplaces = string.Empty, location = string.Empty, symptomstart = string.Empty, phone = string.Empty, homeaddress = string.Empty, name = string.Empty, risklevel = string.Empty;
+            Context.Items.TryGetValue("risklevel", out risklevel);
+            Context.Items.TryGetValue("symptoms", out symptoms);
+            Context.Items.TryGetValue("istravelled", out istravelled);
+            Context.Items.TryGetValue("age", out age);
+            Context.Items.TryGetValue("closecontactcorona", out closecontactcorona);
+            Context.Items.TryGetValue("closecontactnigeria", out closecontactnigeria);
+            Context.Items.TryGetValue("contactsick", out contactsick);
+            Context.Items.TryGetValue("publicplaces", out risklevel);
+            Context.Items.TryGetValue("location", out risklevel);
+            Context.Items.TryGetValue("symptomstart", out symptomstart);
+            Context.Items.TryGetValue("phone", out phone);
+            Context.Items.TryGetValue("homeaddress", out homeaddress);
+            Context.Items.TryGetValue("name", out name);
+
+            List<questionsModel> questions = new List<questionsModel>()
+           {
+                new questionsModel
+                {
+                     question = "What is your name",
+                      response = name == null ? "" : name.ToString(),
+
+                },
+                new questionsModel
+                {
+                     question = "What is your age?",
+                      response = age == null ? "" : age.ToString(),
+
+                },
+                new questionsModel
+                {
+                     question = "Where are you right now? (Area,State)",
+                      response = location == null ? "" : location.ToString(),
+
+                },
+                new questionsModel
+                {
+                     question = "Have you travelled outside the country within the last 14 days? ",
+                      response = istravelled == null ? "" : istravelled.ToString(),
+
+                },
+                new questionsModel
+                {
+                     question = "Have you been in contact with a confirmed case of coronavirus (COVID-19)?",
+                      response = closecontactcorona == null ? "" : closecontactcorona.ToString(),
+
+                },
+                new questionsModel
+                {
+                     question = "Have you been in contact with someone who just arrived in Nigeria in the last one month?",
+                      response = closecontactnigeria == null ? "" : closecontactnigeria.ToString(),
+
+                },
+                new questionsModel
+                {
+                     question = "Is the individual sick or indicating any COVID-19 symptoms?",
+                      response = contactsick == null ? "" : contactsick.ToString(),
+
+                },
+                new questionsModel
+                {
+                     question = "Have you been experiencing any of the following (Select all that apply)",
+                      response = symptoms == null ? "" : symptoms.ToString(),
+
+                },
+                new questionsModel
+                {
+                     question = "when did the symptoms start? (day/month) - (01/10)",
+                      response = symptomstart == null ? "" : symptomstart.ToString(),
+
+                },
+                new questionsModel
+                {
+                     question = "Kindly provide your phone number",
+                      response = phone == null ? "" : phone.ToString(),
+
+                },
+                new questionsModel
+                {
+                     question = "Kindly provide your  contact address",
+                      response = homeaddress == null ? "" : homeaddress.ToString(),
+
+                }
+           };
+            string RiskLevel = risklevel == null ? "" : risklevel.ToString();
+            await NcdcCalls.SendToNCDCAsync(questions, RiskLevel);
+            
+             
+
+             
+        }
         public int calculate()
         {
             object travelhistory = string.Empty, symptoms =string.Empty, closecontact = string.Empty, location =  string.Empty, contactsick = string.Empty;
@@ -448,7 +530,8 @@ namespace GloEpidBot
             }
             else
             {
-                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You seem to be doing fine at the moment. But stay alert and practice social distancing.", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "*Low Risk*", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You seem to be doing fine at the moment. But stay alert and practice social distancing.", Questions[0] });
                  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You can call a doctor if you have any unrelated health issues or questions.", Questions[0] });
                  
                 Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });

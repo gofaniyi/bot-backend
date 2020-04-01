@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace GloEpidBot.Utilities
@@ -13,12 +14,12 @@ namespace GloEpidBot.Utilities
         public async static Task<HttpResponseMessage> MakeCallPost(HttpContent content, IOptions<LuisConfig> options)
         {
             HttpClient client = new HttpClient();
-            //var SessionId = await GetSessionId(config);
+           
 
             
             client.BaseAddress = new Uri($"https://westus.api.cognitive.microsoft.com");
             client.DefaultRequestHeaders.Accept.Clear();
-         //   client.DefaultRequestHeaders.Add("Content-Type", "application/json");
+            client.DefaultRequestHeaders.Add("Content-Type", "application/json");
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "2f119a4df88249fe9968478e442f0c5c");
             
 
@@ -26,6 +27,18 @@ namespace GloEpidBot.Utilities
              
             return response; 
 
+        }
+
+        public static HttpResponseMessage MakeCallNCDC(HttpContent content)
+        {
+            HttpClient client = new HttpClient();
+
+            client.BaseAddress = new Uri("");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Add("Content-Type", "application/json");
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var response = client.PostAsync("", content).Result;
+            return response;
         }
 
 
