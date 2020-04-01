@@ -91,7 +91,7 @@ namespace GloEpidBot.Model.Domain
                  {
                     QuestionId = 7,
                     HasOptions =true,
-                    quest = "Have you been experiencing any of the following (Select all that apply)",
+                    quest = "Have you been experiencing any of the following (Select all that apply and press send)",
                     optionsNextId = "8,8,8,8,8,12".Split(','),
                     NextQuestionYes = 8,
                     NextQuestionNo = 12,
@@ -104,7 +104,7 @@ namespace GloEpidBot.Model.Domain
                    {
                        QuestionId = 8,
                        HasOptions =false,
-                       quest = "when did the symptoms start? (day/month) - (01/10)",
+                       quest = "when did the symptoms start? (dd/mm) - (01/10)",
                        optionsNextId = "10".Split(','),
                        NextQuestionNo = 10,
                        NextQuestionYes = 10
