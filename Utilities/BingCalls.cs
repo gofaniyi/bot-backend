@@ -93,9 +93,17 @@ namespace GloEpidBot.Utilities
             int month = 0;
             int.TryParse(days[0], out day);
             int.TryParse(days[1], out month);
-            if (day > 0 && day < 31)
+            if(month > DateTime.Today.Month)
             {
-                if(month > 0 && month < 12)
+                return false;
+            }else if(day > DateTime.Today.Day && month == DateTime.Today.Month)
+            {
+                return false;
+            }
+
+            if (day > 0 && day <= 31)
+            {
+                if(month > 0 && month <= 12)
                 {
                     return true;
                 }
