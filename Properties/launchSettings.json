@@ -1,0 +1,34 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:31391",
+      "sslPort": 44350
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "weatherforecast",
+      "environmentVariables": {
+        "LUIS_APP_ID": "9d3e37ca-a828-4f8a-bac2-0dd87a93193d",
+        "LUIS_PREDICTION_KEY": "2f119a4df88249fe9968478e442f0c5c",
+        "LUIS_ENDPOINT_NAME": "https://westus.api.cognitive.microsoft.com",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "BING_API_KEY": "Are9CBi7r7JaLuQJY6dTT8ESZqPljtO0OVK0nHSXdwu14MP1BG4DweZo3DF-FoyE"
+      }
+    },
+    "GloEpidBot": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "weatherforecast",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+    }
+  }
+}
