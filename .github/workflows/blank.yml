@@ -17,6 +17,6 @@ jobs:
         APP_NAME: ${{ 'gloepid-production' }}
       run: |
         cd ./
-        docker login --username=_ --password=$HEROKU_API_PROD_KEY registry.heroku.com
+        docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
         heroku container:push web -a $APP_NAME
         heroku container:release web -a $APP_NAME
