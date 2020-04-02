@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using GloEpidBot.Model.Domain;
 using GloEpidBot.Persistence.Contexts;
 using GloEpidBot.Utilities;
@@ -13,10 +14,11 @@ namespace GloEpidBot.Controllers
     public class AssesmentController : Controller
     {
         private readonly AppDbContext _context;
-
-        public AssesmentController(AppDbContext context)
+        private readonly IMapper _mapper;
+        public AssesmentController(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
 

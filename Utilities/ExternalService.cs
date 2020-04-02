@@ -33,11 +33,20 @@ namespace GloEpidBot.Utilities
         {
             HttpClient client = new HttpClient();
 
-            client.BaseAddress = new Uri("");
+            client.BaseAddress = new Uri("https://ncdcdashboard.herokuapp.com");
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Add("Content-Type", "application/json");
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var response = client.PostAsync("", content).Result;
+            //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
+            try
+            {
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+          
+            var response = client.PostAsync("api/v1/assessments", content).Result;
             return response;
         }
 

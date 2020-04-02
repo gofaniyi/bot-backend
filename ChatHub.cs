@@ -41,12 +41,13 @@ namespace GloEpidBot
            
             if (NextQuestionId == 35)
             {
+                Context.Items.Add("home", message);
                 object risklevel = string.Empty;
                 Context.Items.TryGetValue("risklevel", out risklevel);
 
                 if (risklevel.ToString() == "high")
                 {
-                   await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "*High Risk*", Questions[0] });
+                   await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "**High Risk**", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Please be patient and wait for NCDC to contact you", Questions[0] });
                   await  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "In the meantime kindly do the following", Questions[0] });
                  await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Remain calm ", Questions[0] });
@@ -58,7 +59,7 @@ namespace GloEpidBot
                 }
                 else
                 {
-                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "*Medium Risk*", Questions[0] });
+                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "**Medium Risk**", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You may have been exposed. Please self isolate and monitor your health status", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " if there are any changes to your symptoms, please call a doctor or take the assessment test again", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
@@ -386,11 +387,11 @@ namespace GloEpidBot
             Context.Items.TryGetValue("closecontactcorona", out closecontactcorona);
             Context.Items.TryGetValue("closecontactnigeria", out closecontactnigeria);
             Context.Items.TryGetValue("contactsick", out contactsick);
-            Context.Items.TryGetValue("publicplaces", out risklevel);
-            Context.Items.TryGetValue("location", out risklevel);
+            Context.Items.TryGetValue("publicplaces", out publicplaces);
+            Context.Items.TryGetValue("location", out location);
             Context.Items.TryGetValue("symptomstart", out symptomstart);
             Context.Items.TryGetValue("phone", out phone);
-            Context.Items.TryGetValue("homeaddress", out homeaddress);
+            Context.Items.TryGetValue("home", out homeaddress);
             Context.Items.TryGetValue("name", out name);
 
             List<questionsModel> questions = new List<questionsModel>()
@@ -530,7 +531,7 @@ namespace GloEpidBot
             }
             else
             {
-                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "*Low Risk*", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "**Low Risk**", Questions[0] });
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You seem to be doing fine at the moment. But stay alert and practice social distancing.", Questions[0] });
                  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You can call a doctor if you have any unrelated health issues or questions.", Questions[0] });
                  
