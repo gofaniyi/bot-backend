@@ -50,7 +50,6 @@ namespace GloEpidBot
             services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins("https://gloepid.org", "http://127.0.0.1:3000","http://localhost:3000", "https://gloepid-production.netlify.com", "https://gloepid.netlify.com").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
             //services.AddCors(o => o.AddPolicy("All", b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
             services.AddOptions();
-
             services.AddScoped<IReportRepository, ReportRepository>();
             services.AddScoped<IReportService, ReportService>();
             

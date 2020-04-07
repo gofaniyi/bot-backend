@@ -17,15 +17,19 @@ namespace GloEpidBot.Utilities
 
        
 
-        public static async Task SendToNCDCAsync(List<AssessmentResponsesModel> questions, string RiskLevel, string Channel, string State)
+        public static async Task SendToNCDCAsync(List<AssessmentResponsesModel> questions, string RiskLevel, string Channel, string State, string Phone, string[] symptoms, string FullName)
         {
-            EvaluatedRiskLevel evaluatedRiskLevel = EvaluatedRiskLevel.MediumRisk;
-            if (RiskLevel.ToLower() == "high")
-                evaluatedRiskLevel = EvaluatedRiskLevel.HighRisk;
-            else if (RiskLevel.ToLower() == "low")
-                evaluatedRiskLevel = EvaluatedRiskLevel.LowRisk;
-            else if (RiskLevel.ToLower() == "medium")
-                evaluatedRiskLevel = EvaluatedRiskLevel.MediumRisk;
+            var statesCode = "FC,AB,AD,AK,AN,BA,BY,BE,BO,CR,DE,EB,ED,EK,EN,GO,IM,JI,KD,KN,KT,KE,KO,KW,LA,NA,NI,OG,ON,OS,OY,PL,RI,SO,TA,YO,ZA".Split(',');
+            var states = "Abuja,Abia,Adamawa,Akwa Ibom,Anambra,Bauchi,Bayelsa,Benue,Borno,Cross River,Delta,Ebonyi,Edo,Ekiti,Enugu,Gombe,Imo,Jigawa,Kaduna,Kano,Katsina,Kebbi,Kogi,Kwara,Lagos,Nasarawa,Niger,Ogun,Ondo,Osun,Oyo,Plateau,Rivers,Sokoto,Taraba,Yobe,Zamfara".Split(',');
+            string LocationCode = string.Empty;
+            if (states.Contains(State))
+            {
+                int i = Array.IndexOf(states, State);
+                LocationCode = statesCode[i];
+
+            }
+               
+
 
 
             var AssData = new AssessmentModel
@@ -33,7 +37,11 @@ namespace GloEpidBot.Utilities
                 assessmentResponses = questions,
               
                 createdAt = DateTime.Now,
-                Location = State
+                State = LocationCode,
+                PhoneNumber = Phone,
+                Symptoms = symptoms,
+                FullName = FullName,
+                sourcePartnerId = 1
             };
             if (RiskLevel.ToLower() == "high")
                 AssData.assessmentResult = AssessmentStatus.HighRisk;
@@ -52,7 +60,7 @@ namespace GloEpidBot.Utilities
             var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
             var byteContent = new ByteArrayContent(buffer);
            
-            ExternalService.MakeCallNCDC(byteContent);
+            ExternalService.MakeCallNCDCAsync(byteContent);
 
         }
     }
@@ -64,7 +72,10 @@ namespace GloEpidBot.Utilities
         public Channel assessmentChannel { get; set; }
         public DateTime createdAt { get; set; }
         public AssessmentStatus assessmentResult { get; set; }
-        public string Location { get; set; }
+        public string State { get; set; }
+        public string PhoneNumber { get; set; }
+        public string [] Symptoms { get; set; }
+        public string FullName { get; set; }
 
     }
     public enum Channel

@@ -227,10 +227,11 @@ namespace GloEpidBot
                           //TODO : Check location with bing api
                           if(answers.Length == 0)
                             {
-                                if (BingCalls.ValidateLocation(message))
+                                string r = BingCalls.ValidateLocation(message);
+                                if (r != "false")
                                 {
 
-                                    Context.Items.Add("location", message);
+                                    Context.Items.Add("location", r);
                              
                                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                                     return System.Threading.Tasks.Task.CompletedTask;
@@ -471,10 +472,10 @@ namespace GloEpidBot
                 }
            };
             string RiskLevel = risklevel == null ? "" : risklevel.ToString();
-            string state = string.Empty;
-            if (location != null && location.ToString().Contains(','))
-               state = location.ToString().Split(',')[1];
-            await NcdcCalls.SendToNCDCAsync(questions, RiskLevel,channel.ToString(), state);
+            string state = location == null ? "" : location.ToString();
+            if (channel == null)
+                channel = string.Empty;
+            await NcdcCalls.SendToNCDCAsync(questions, RiskLevel,channel.ToString(), state, phone.ToString(), symptoms.ToString().Split(','), name.ToString());
             
              
 

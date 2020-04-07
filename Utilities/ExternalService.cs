@@ -29,7 +29,7 @@ namespace GloEpidBot.Utilities
 
         }
 
-        public static HttpResponseMessage MakeCallNCDC(HttpContent content)
+        public static async Task<HttpResponseMessage> MakeCallNCDCAsync(HttpContent content)
         {
             HttpClient client = new HttpClient();
 
@@ -46,7 +46,8 @@ namespace GloEpidBot.Utilities
                 throw;
             }
           
-            var response = client.PostAsync("api/v1/assessments", content).Result;
+            var response = client.PostAsync("api/v1/Assessment/AddAssessment", content).Result;
+            var r  = await response.Content.ReadAsStringAsync();
             return response;
         }
 
