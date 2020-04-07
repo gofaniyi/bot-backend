@@ -8259,11 +8259,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\HP\\source\\repos\\Gloepid\\GloEpidBot\\GloEpidBot.csproj",
+      "projectUniqueName": "C:\\Users\\HP\\source\\repos\\GloEpidNewBot\\Gloepid-Covid19-Bot-Backend\\GloEpidBot.csproj",
       "projectName": "GloEpidBot",
-      "projectPath": "C:\\Users\\HP\\source\\repos\\Gloepid\\GloEpidBot\\GloEpidBot.csproj",
+      "projectPath": "C:\\Users\\HP\\source\\repos\\GloEpidNewBot\\Gloepid-Covid19-Bot-Backend\\GloEpidBot.csproj",
       "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\HP\\source\\repos\\Gloepid\\GloEpidBot\\obj\\",
+      "outputPath": "C:\\Users\\HP\\source\\repos\\GloEpidNewBot\\Gloepid-Covid19-Bot-Backend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

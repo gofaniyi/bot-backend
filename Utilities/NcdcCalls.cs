@@ -37,10 +37,10 @@ namespace GloEpidBot.Utilities
                 assessmentResponses = questions,
               
                 createdAt = DateTime.Now,
-                State = LocationCode,
-                PhoneNumber = Phone,
-                Symptoms = symptoms,
-                FullName = FullName,
+                stateCode = LocationCode,
+                phoneNumber = Phone,
+                symptoms = symptoms,
+                fullName = FullName,
                 sourcePartnerId = 1
             };
             if (RiskLevel.ToLower() == "high")
@@ -72,12 +72,25 @@ namespace GloEpidBot.Utilities
         public Channel assessmentChannel { get; set; }
         public DateTime createdAt { get; set; }
         public AssessmentStatus assessmentResult { get; set; }
-        public string State { get; set; }
-        public string PhoneNumber { get; set; }
-        public string [] Symptoms { get; set; }
-        public string FullName { get; set; }
+        public string stateCode { get; set; }
+        public string[] symptoms { get; set; }
+        public Gender gender { get; set; }
+        public string phoneNumber { get; set; }
+        public string fullName { get; set; }
+        public string location { get; set; }
+        public string email { get; set; }
 
     }
+    public enum Gender
+    {
+        [Description("Unknown")]
+        Unknown = 0,
+        [Description("Male")]
+        Male,
+        [Description("Female")]
+        Female
+    }
+
     public enum Channel
     {
         [Description("USSD")]
