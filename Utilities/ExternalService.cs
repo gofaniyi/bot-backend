@@ -29,11 +29,11 @@ namespace GloEpidBot.Utilities
 
         }
 
-        public static HttpResponseMessage MakeCallNCDC(HttpContent content)
+        public static async Task<HttpResponseMessage> MakeCallNCDCAsync(HttpContent content)
         {
             HttpClient client = new HttpClient();
 
-            client.BaseAddress = new Uri("https://ncdcdashboard.herokuapp.com");
+            client.BaseAddress = new Uri("https://gloepid-ncdc-dashboard-api.azurewebsites.net");
             client.DefaultRequestHeaders.Accept.Clear();
             //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
             try
@@ -46,7 +46,8 @@ namespace GloEpidBot.Utilities
                 throw;
             }
           
-            var response = client.PostAsync("api/v1/assessments", content).Result;
+            var response = client.PostAsync("api/v1/Assessment/AddAssessment", content).Result;
+            var r  = await response.Content.ReadAsStringAsync();
             return response;
         }
 

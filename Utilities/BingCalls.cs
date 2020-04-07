@@ -48,20 +48,20 @@ namespace GloEpidBot.Utilities
             }
         }
 
-        public static bool ValidateLocation(string location)
+        public static string ValidateLocation(string location)
         {
 
             
             string dstate = string.Empty;
             if (!location.Contains(','))
-                return false;
+                return "false";
             var local = location.Split(',');
 
             
             
             if(local.Length != 2)
             {
-                return false;
+                return "false";
             }
             else
             {
@@ -75,12 +75,12 @@ namespace GloEpidBot.Utilities
                 {
                     if(localwithstate.ToString().ToLower() == states.ToLower())
                     {
-                        return true;
+                        return localwithstate;
                     }
                     
                 }
 
-                return false;
+                return "false";
             }
         }
 
