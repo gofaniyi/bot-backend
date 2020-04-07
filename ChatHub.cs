@@ -33,7 +33,12 @@ namespace GloEpidBot
             return System.Threading.Tasks.Task.CompletedTask;
         }
 
-
+        public System.Threading.Tasks.Task SelfIdentify(string channel)
+        {
+            if (channel != null)
+                Context.Items.Add("channel", channel);
+            return System.Threading.Tasks.Task.CompletedTask;
+        }
         public async System.Threading.Tasks.Task<System.Threading.Tasks.Task> SendResponse(string[] answers, string message, int QuestionId, int NextQuestionId)
         {
 
@@ -380,6 +385,7 @@ namespace GloEpidBot
         public async System.Threading.Tasks.Task SendResultAsync()
         {
             object symptoms = string.Empty, istravelled = string.Empty, age = string.Empty, selfisolating = string.Empty, closecontactcorona = string.Empty, closecontactnigeria = string.Empty, contactsick = string.Empty, publicplaces = string.Empty, location = string.Empty, symptomstart = string.Empty, phone = string.Empty, homeaddress = string.Empty, name = string.Empty, risklevel = string.Empty;
+            object channel = string.Empty;
             Context.Items.TryGetValue("risklevel", out risklevel);
             Context.Items.TryGetValue("symptoms", out symptoms);
             Context.Items.TryGetValue("istravelled", out istravelled);
@@ -393,70 +399,71 @@ namespace GloEpidBot
             Context.Items.TryGetValue("phone", out phone);
             Context.Items.TryGetValue("home", out homeaddress);
             Context.Items.TryGetValue("name", out name);
+            Context.Items.TryGetValue("channel", out channel);
 
-            List<questionsModel> questions = new List<questionsModel>()
+            List<AssessmentResponsesModel> questions = new List<AssessmentResponsesModel>()
            {
-                new questionsModel
+                new AssessmentResponsesModel
                 {
                      question = "What is your name",
                       response = name == null ? "" : name.ToString(),
 
                 },
-                new questionsModel
+                new AssessmentResponsesModel
                 {
                      question = "What is your age?",
                       response = age == null ? "" : age.ToString(),
 
                 },
-                new questionsModel
+                new AssessmentResponsesModel
                 {
                      question = "Where are you right now? (Area,State)",
                       response = location == null ? "" : location.ToString(),
 
                 },
-                new questionsModel
+                new AssessmentResponsesModel
                 {
                      question = "Have you travelled outside the country within the last 14 days? ",
                       response = istravelled == null ? "" : istravelled.ToString(),
 
                 },
-                new questionsModel
+                new AssessmentResponsesModel
                 {
                      question = "Have you been in contact with a confirmed case of coronavirus (COVID-19)?",
                       response = closecontactcorona == null ? "" : closecontactcorona.ToString(),
 
                 },
-                new questionsModel
+                new AssessmentResponsesModel
                 {
                      question = "Have you been in contact with someone who just arrived in Nigeria in the last one month?",
                       response = closecontactnigeria == null ? "" : closecontactnigeria.ToString(),
 
                 },
-                new questionsModel
+                new AssessmentResponsesModel
                 {
                      question = "Is the individual sick or indicating any COVID-19 symptoms?",
                       response = contactsick == null ? "" : contactsick.ToString(),
 
                 },
-                new questionsModel
+                new AssessmentResponsesModel
                 {
                      question = "Have you been experiencing any of the following (Select all that apply)",
                       response = symptoms == null ? "" : symptoms.ToString(),
 
                 },
-                new questionsModel
+                new AssessmentResponsesModel
                 {
                      question = "when did the symptoms start? (day/month) - (01/10)",
                       response = symptomstart == null ? "" : symptomstart.ToString(),
 
                 },
-                new questionsModel
+                new AssessmentResponsesModel
                 {
                      question = "Kindly provide your phone number",
                       response = phone == null ? "" : phone.ToString(),
 
                 },
-                new questionsModel
+                new AssessmentResponsesModel
                 {
                      question = "Kindly provide your  contact address",
                       response = homeaddress == null ? "" : homeaddress.ToString(),
@@ -464,7 +471,10 @@ namespace GloEpidBot
                 }
            };
             string RiskLevel = risklevel == null ? "" : risklevel.ToString();
-            await NcdcCalls.SendToNCDCAsync(questions, RiskLevel);
+            string state = string.Empty;
+            if (location != null && location.ToString().Contains(','))
+               state = location.ToString().Split(',')[1];
+            await NcdcCalls.SendToNCDCAsync(questions, RiskLevel,channel.ToString(), state);
             
              
 

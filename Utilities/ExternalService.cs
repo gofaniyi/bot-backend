@@ -33,7 +33,7 @@ namespace GloEpidBot.Utilities
         {
             HttpClient client = new HttpClient();
 
-            client.BaseAddress = new Uri("https://ncdcdashboard.herokuapp.com");
+            client.BaseAddress = new Uri("https://gloepid-ncdc-dashboard-api.azurewebsites.net");
             client.DefaultRequestHeaders.Accept.Clear();
             //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
             try
