@@ -52,21 +52,25 @@ namespace GloEpidBot
 
                 if (risklevel.ToString() == "high")
                 {
-                   await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "**High Risk**", Questions[0] });
-                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Please be patient and wait for NCDC to contact you", Questions[0] });
-                  await  Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "In the meantime kindly do the following", Questions[0] });
-                 await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Remain calm ", Questions[0] });
-                 await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Self-Isolate", Questions[0] });
-                 await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Wait for healthcare services to contact you for further information and next steps", Questions[0] });
-
-
-                  await  Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "**High Risk**", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Please be patient and wait for NCDC to contact you", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "In the meantime kindly do the following", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Remain calm ", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Self-Isolate", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Wait for healthcare services to contact you for further information and next steps", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "NCDC Number - 0800-970000-10 Toll Free Call Center", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Send a DM to Twitter @NCDCGov", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Email address to reach NCDC - info@ndcd.gov.ng", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
                 }
                 else
                 {
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "**Medium Risk**", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You may have been exposed. Please self isolate and monitor your health status", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " if there are any changes to your symptoms, please call a doctor or take the assessment test again", Questions[0] });
+                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "NCDC Number - 0800-970000-10 Toll Free Call Center", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Send a DM to Twitter @NCDCGov", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Email address to reach NCDC - info@ndcd.gov.ng", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
 
 
@@ -544,8 +548,10 @@ namespace GloEpidBot
             {
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "**Low Risk**", Questions[0] });
                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You seem to be doing fine at the moment. But stay alert and practice social distancing.", Questions[0] });
-                 Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You can call a doctor if you have any unrelated health issues or questions.", Questions[0] });
-                 
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You can call a doctor if you have any unrelated health issues or questions.", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "NCDC Number - 0800-970000-10 Toll Free Call Center", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Send a DM to Twitter @NCDCGov", Questions[0] });
+                Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Email address to reach NCDC - info@ndcd.gov.ng", Questions[0] });
                 Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
                 return 0;
 
