@@ -58,7 +58,9 @@ namespace GloEpidBot
                  await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Remain calm ", Questions[0] });
                  await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Self-Isolate", Questions[0] });
                  await   Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Wait for healthcare services to contact you for further information and next steps", Questions[0] });
-
+                  await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "NCDC Number - 0800-970000-10 Toll Free Call Center", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Send a DM to Twitter @NCDCGov", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Email address to reach NCDC - info@ndcd.gov.ng", Questions[0] });
 
                   await  Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
                 }
@@ -67,6 +69,9 @@ namespace GloEpidBot
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "**Medium Risk**", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "You may have been exposed. Please self isolate and monitor your health status", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { " if there are any changes to your symptoms, please call a doctor or take the assessment test again", Questions[0] });
+                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "NCDC Number - 0800-970000-10 Toll Free Call Center", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Send a DM to Twitter @NCDCGov", Questions[0] });
+                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Email address to reach NCDC - info@ndcd.gov.ng", Questions[0] });
                     await Clients.Client(Context.ConnectionId).SendCoreAsync("CloseConnection", new object[] { "Terminate connection" });
 
 
