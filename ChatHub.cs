@@ -133,7 +133,8 @@ namespace GloEpidBot
                                 {
                                     Symptoms = Symptoms + "," + item;
                                 }
-                                Context.Items.Add("symptoms", Symptoms);
+                                Context.Items.TryAdd("symptoms", Symptoms);
+                             //   Context.Items.Add("symptoms", Symptoms);
 
                                 int r = calculate();
                                 if(r == 0)
@@ -151,19 +152,19 @@ namespace GloEpidBot
 
                                 if (QuestionId == 3)
                                 {
-                                    Context.Items.Add("istravelled", answers[0]);
+                                    Context.Items.TryAdd("istravelled", answers[0]);
                                 }
 
                                 else if(QuestionId == 1)
                                 {
-                                    Context.Items.Add("age", answers[0]);
+                                    Context.Items.TryAdd("age", answers[0]);
                                 }
             
                                 else if (QuestionId == 9)
                                 {
                                    
 
-                                  Context.Items.Add("selfisolating", answers[0]);    
+                                  Context.Items.TryAdd("selfisolating", answers[0]);    
                                   await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                                     return System.Threading.Tasks.Task.CompletedTask;
 
@@ -174,7 +175,7 @@ namespace GloEpidBot
                                 {
 
 
-                                    Context.Items.Add("closecontactcorona", answers[0]);
+                                    Context.Items.TryAdd("closecontactcorona", answers[0]);
                                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                                     return System.Threading.Tasks.Task.CompletedTask;
 
@@ -182,7 +183,7 @@ namespace GloEpidBot
 
                                 else if (QuestionId == 5)
                                 {
-                                    Context.Items.Add("closecontactnigeria", answers[0]);
+                                    Context.Items.TryAdd("closecontactnigeria", answers[0]);
                                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Okay", Questions[NextQuestionId] });
                                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
 
@@ -190,7 +191,7 @@ namespace GloEpidBot
                                 }
                                 else if (QuestionId == 6)
                                 {
-                                    Context.Items.Add("contactsick", answers[0]);
+                                    Context.Items.TryAdd("contactsick", answers[0]);
                                    
                                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
 
@@ -198,7 +199,7 @@ namespace GloEpidBot
                                 }
                                 else if (QuestionId == 10)
                                 {
-                                    Context.Items.Add("publicplaces", answers[0]);
+                                    Context.Items.TryAdd("publicplaces", answers[0]);
                                        
                                         await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
 
@@ -236,7 +237,7 @@ namespace GloEpidBot
                                 if (r != "false")
                                 {
 
-                                    Context.Items.Add("location", r);
+                                    Context.Items.TryAdd("location", r);
                              
                                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                                     return System.Threading.Tasks.Task.CompletedTask;
@@ -266,7 +267,7 @@ namespace GloEpidBot
                         {
                             if (BingCalls.ValidateDate(message))
                             {
-                                Context.Items.Add("symptomstart", message);
+                                Context.Items.TryAdd("symptomstart", message);
                               
                                 await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                                 return System.Threading.Tasks.Task.CompletedTask;
@@ -285,7 +286,7 @@ namespace GloEpidBot
                            
                             if(Luiscalls.IsPhoneNumber(message))
                             {
-                                Context.Items.Add("phone", message);
+                                Context.Items.TryAdd("phone", message);
                          
                                 await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                                 return System.Threading.Tasks.Task.CompletedTask;
@@ -302,7 +303,7 @@ namespace GloEpidBot
                         else if (QuestionId == 13)
                         {
 
-                            Context.Items.Add("homeaddress", message);
+                            Context.Items.TryAdd("homeaddress", message);
                      
                             await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
@@ -331,11 +332,11 @@ namespace GloEpidBot
                                 {
                                     PersonName += data;
                                 }
-                                Context.Items.Add("name", PersonName);
+                                Context.Items.TryAdd("name", PersonName);
                             }
                             else if (message.Split().Length <= 2)
                             {
-                                Context.Items.Add("name", message);
+                                Context.Items.TryAdd("name", message);
                             }
                             else
                             {
@@ -507,42 +508,42 @@ namespace GloEpidBot
             if (travelhistory != null && travelhistory.ToString() != "No" && (symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
             {
 
-                Context.Items.Add("risklevel", "high");
+                Context.Items.TryAdd("risklevel", "high");
                 return 2;
 
             }else if(closecontact.ToString() == "Yes" && (symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
             {
-                Context.Items.Add("risklevel", "high");
+                Context.Items.TryAdd("risklevel", "high");
                 return 2;
             }
             else if((symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")) && (location.ToString().Contains("Lagos")|| location.ToString().Contains("Oyo")|| location.ToString().Contains("Abuja"))) {
-                Context.Items.Add("risklevel", "high");
+                Context.Items.TryAdd("risklevel", "high");
                 return 2;
             }
 
             else if(travelhistory.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms"))
             {
-                Context.Items.Add("risklevel", "medium");
+                Context.Items.TryAdd("risklevel", "medium");
                 return 1;
             }
             else if(closecontact.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms"))
             {
-                Context.Items.Add("risklevel", "medium");
+                Context.Items.TryAdd("risklevel", "medium");
                 return 1;
             }
             else if(contactsick.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms"))
             {
-                Context.Items.Add("risklevel", "medium");
+                Context.Items.TryAdd("risklevel", "medium");
                 return 1;
             }
             else if(contactsick.ToString() == "Not to my knowledge" && (symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
             {
-                Context.Items.Add("risklevel", "medium");
+                Context.Items.TryAdd("risklevel", "medium");
                 return 1;
             }
             else if((symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
             {
-                Context.Items.Add("risklevel", "medium");
+                Context.Items.TryAdd("risklevel", "medium");
                 return 1;
             }
             else
