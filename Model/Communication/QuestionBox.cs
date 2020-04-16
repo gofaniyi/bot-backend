@@ -57,7 +57,7 @@ namespace GloEpidBot.Model.Domain
                  {
                     QuestionId = 4,
                     HasOptions =true,
-                    quest = "Have you been in contact with a confirmed case of coronavirus (COVID-19)?",
+                    quest = "Have you been in contact with someone who tested positive for Coronavirus?",
                     optionsNextId = "7,5,5".Split(','),
                     NextQuestionYes = 7,
                     NextQuestionNo = 6,
