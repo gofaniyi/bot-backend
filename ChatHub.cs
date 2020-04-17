@@ -482,7 +482,7 @@ namespace GloEpidBot
             string homeAddress = homeaddress == null ? "" : homeaddress.ToString();
             if (channel == null)
                 channel = string.Empty;
-            await NcdcCalls.SendToNCDCAsync(questions, RiskLevel,channel.ToString(), state, phone.ToString(), symptoms.ToString().Split(','), name.ToString(),homeaddress);
+            await NcdcCalls.SendToNCDCAsync(questions, RiskLevel,channel.ToString(), state, phone.ToString(), symptoms.ToString().Split(','), name.ToString(),homeaddress.ToString());
             
              
 
