@@ -19,7 +19,7 @@ namespace GloEpidBot.Utilities
 
         public static async Task SendToNCDCAsync(List<AssessmentResponsesModel> questions, string RiskLevel, string Channel, string State, string Phone, string[] symptoms, string FullName)
         {
-            var statesCode = "FC,AB,AD,AK,AN,BA,BY,BE,BO,CR,DE,EB,ED,EK,EN,GO,IM,JI,KD,KN,KT,KE,KO,KW,LA,NA,NI,OG,ON,OS,OY,PL,RI,SO,TA,YO,ZA".Split(',');
+            var statesCode = "NG-FC,NG-AB,NG-AD,NG-AK,NG-AN,NG-BA,NG-BY,NG-BE,NG-BO,NG-CR,NG-DE,NG-EB,NG-ED,NG-EK,NG-EN,NG-GO,NG-IM,NG-JI,NG-KD,NG-KN,NG-KT,NG-KE,NG-KO,NG-KW,NG-LA,NG-NA,NG-NI,NG-OG,NG-ON,NG-OS,NG-OY,NG-PL,NG-RI,NG-SO,NG-TA,NG-YO,NG-ZA".Split(',');
             var states = "Abuja,Abia,Adamawa,Akwa Ibom,Anambra,Bauchi,Bayelsa,Benue,Borno,Cross River,Delta,Ebonyi,Edo,Ekiti,Enugu,Gombe,Imo,Jigawa,Kaduna,Kano,Katsina,Kebbi,Kogi,Kwara,Lagos,Nasarawa,Niger,Ogun,Ondo,Osun,Oyo,Plateau,Rivers,Sokoto,Taraba,Yobe,Zamfara".Split(',');
             string LocationCode = string.Empty;
             if (states.Contains(State))
@@ -35,13 +35,12 @@ namespace GloEpidBot.Utilities
             var AssData = new AssessmentModel
             {
                 assessmentResponses = questions,
-              
                 createdAt = DateTime.Now,
-                State = LocationCode,
-                PhoneNumber = Phone,
-                Symptoms = symptoms,
-                FullName = FullName,
-                sourcePartnerId = 1
+                phoneNumber = Phone,
+                symptoms = symptoms,
+                fullName = FullName,
+                stateCode = LocationCode
+               
             };
             if (RiskLevel.ToLower() == "high")
                 AssData.assessmentResult = AssessmentStatus.HighRisk;
@@ -51,7 +50,7 @@ namespace GloEpidBot.Utilities
                 AssData.assessmentResult = AssessmentStatus.LowRisk;
 
             if (Channel.ToLower() == "mobile")
-                AssData.assessmentChannel = Utilities.Channel.GloEpidMobile;
+                AssData.assessmentChannel = Utilities.Channel.Mobile;
             else if (Channel.ToLower() == "web")
                 AssData.assessmentChannel = Utilities.Channel.Web;
 
@@ -60,7 +59,7 @@ namespace GloEpidBot.Utilities
             var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
             var byteContent = new ByteArrayContent(buffer);
            
-            ExternalService.MakeCallNCDCAsync(byteContent);
+            await ExternalService.MakeCallNCDCAsync(byteContent);
 
         }
     }
@@ -72,10 +71,12 @@ namespace GloEpidBot.Utilities
         public Channel assessmentChannel { get; set; }
         public DateTime createdAt { get; set; }
         public AssessmentStatus assessmentResult { get; set; }
-        public string State { get; set; }
-        public string PhoneNumber { get; set; }
-        public string [] Symptoms { get; set; }
-        public string FullName { get; set; }
+        public string location { get; set; }
+        public string phoneNumber { get; set; }
+        public string [] symptoms { get; set; }
+        public string fullName { get; set; }
+        public string email { get; set; } = "taiwo.insight@gmail.com";
+        public string stateCode { get; set; }
 
     }
     public enum Channel
@@ -84,9 +85,12 @@ namespace GloEpidBot.Utilities
         USSD = 1,
         [Description("Mobile")]
         Mobile,
-        [Description("GloEpid Mobile")]
-        GloEpidMobile,
-        Web
+        [Description("Bot")]
+        Bot,
+        [Description("Web")]
+        Web,
+        [Description("Others")]
+        Others
     }
     public class AssessmentResponsesModel
     {
@@ -98,7 +102,7 @@ namespace GloEpidBot.Utilities
     public enum AssessmentStatus
     {
         [Description("Not Assessed")]
-        NotAssessed = 0,
+        NotAssessed = 1,
         [Description("Low Risk")]
         LowRisk,
         [Description("Medium Risk")]
@@ -107,7 +111,7 @@ namespace GloEpidBot.Utilities
         HighRisk,
         [Description("Confirmed")]
         Confirmed,
-        [Description("Healed")]
-        Healed
+        [Description("Discharged")]
+        Discharged
     }
 }
