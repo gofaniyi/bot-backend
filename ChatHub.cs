@@ -517,7 +517,7 @@ namespace GloEpidBot
                 Context.Items.TryAdd("risklevel", "high");
                 return 2;
             }
-            else if((symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")) && (location.ToString().Contains("Lagos")|| location.ToString().Contains("Oyo")|| location.ToString().Contains("Abuja"))) {
+            else if((symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")) && (location.ToString().Contains("Lagos")|| location.ToString().Contains("Oyo")|| location.ToString().Contains("FCT") || location.ToString().Contains("Osun")|| location.ToString().Contains("Kastina")|| location.ToString().Contains("Abuja")|| location.ToString().Contains("Ogun"))) {
                 Context.Items.TryAdd("risklevel", "high");
                 return 2;
             }
