@@ -265,17 +265,18 @@ namespace GloEpidBot
                         }
                         else if (QuestionId == 8)
                         {
-                            if (BingCalls.ValidateDate(message))
+                            string response = BingCalls.ValidateDate(message);
+                            if (response != "Date format not recognized, Try again" && response != "Date format not recognized, Try again")
                             {
-                                Context.Items.TryAdd("symptomstart", message);
+                                Context.Items.TryAdd("symptomstart", response);
                               
                                 await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
                                 return System.Threading.Tasks.Task.CompletedTask;
                             }
                             else
                             {
-                                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "please use this format day/month", Questions[QuestionId] });
-                               /// await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, Questions[QuestionId] });
+                                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { response, Questions[QuestionId] });
+                              
                                 return System.Threading.Tasks.Task.CompletedTask;
                             }
                           

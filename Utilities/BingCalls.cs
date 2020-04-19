@@ -84,39 +84,19 @@ namespace GloEpidBot.Utilities
             }
         }
 
-        public static bool ValidateDate(string date)
+        public static string ValidateDate(string date)
         {
-            var days = date.Split('/');
-            if (days.Length != 2)
-                return false;
-            int day = 0;
-            int month = 0;
-            int.TryParse(days[0], out day);
-            int.TryParse(days[1], out month);
-            if(month > DateTime.Today.Month)
-            {
-                return false;
-            }else if(day > DateTime.Today.Day && month == DateTime.Today.Month)
-            {
-                return false;
-            }
+            DateTime datey;
+            var r = DateTime.TryParse(date, out datey);
+            if (!r)
+                return "Date format not recognized, Try again";
 
-            if (day > 0 && day <= 31)
-            {
-                if(month > 0 && month <= 12)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
 
-            }
+            if (datey.Date > DateTime.Today.Date)
+                return "Symptoms start date can not be in the future";
+
+            return datey.ToString();
+                     
         }
     }
 }
