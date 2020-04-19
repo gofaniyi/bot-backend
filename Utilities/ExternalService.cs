@@ -11,34 +11,22 @@ namespace GloEpidBot.Utilities
 {
     public static class ExternalService
     {
-        public async static Task<HttpResponseMessage> MakeCallPost(HttpContent content, IOptions<LuisConfig> options)
-        {
-            HttpClient client = new HttpClient();
-           
-
-            
-            client.BaseAddress = new Uri($"https://westus.api.cognitive.microsoft.com");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Add("Content-Type", "application/json");
-            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "2f119a4df88249fe9968478e442f0c5c");
-            
-
-            var response = await client.PostAsync("/luis/v2.0/apps/9d3e37ca-a828-4f8a-bac2-0dd87a93193d", content);
-             
-            return response; 
-
-        }
+        private static string ACCESS_TOKEN = Environment.GetEnvironmentVariable("ACCESS_TOKEN");
+        private static string DATABASE_API_URL = Environment.GetEnvironmentVariable("DATABASE_API_URL");
+     
 
         public static async Task<HttpResponseMessage> MakeCallNCDCAsync(HttpContent content)
         {
             HttpClient client = new HttpClient();
 
-            client.BaseAddress = new Uri("https://gloepid-ncdc-dashboard-api.azurewebsites.net");
+            client.BaseAddress = new Uri(DATABASE_API_URL);
             client.DefaultRequestHeaders.Accept.Clear();
             //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
             try
             {
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                content.Headers.Add("token", ACCESS_TOKEN);
+                
             }
             catch (Exception ex)
             {
@@ -47,7 +35,7 @@ namespace GloEpidBot.Utilities
             }
           
             var response = client.PostAsync("api/v1/Assessment/AddAssessment", content).Result;
-            var r  = await response.Content.ReadAsStringAsync();
+            var responseAsString  = await response.Content.ReadAsStringAsync();
             return response;
         }
 
