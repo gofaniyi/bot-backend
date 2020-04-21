@@ -1,5 +1,4 @@
 ﻿using GloEpidBot.Model.Domain;
-using GloEpidBot.Persistence.Contexts;
 using GloEpidBot.Utilities;
 using Google.Cloud.Dialogflow.V2;
 using Microsoft.AspNetCore.Http;
@@ -16,10 +15,10 @@ namespace GloEpidBot
     public class ChatHub : Microsoft.AspNetCore.SignalR.Hub
     {
         readonly List<question> Questions = QuestionBox.ReturnQuestions();
-        private readonly AppDbContext db;
-        public ChatHub(AppDbContext db)
+       
+        public ChatHub()
         {
-            this.db = db;
+           
         }
 
 
@@ -28,7 +27,7 @@ namespace GloEpidBot
         {
 
 
-            Clients.Client(Context.ConnectionId).SendCoreAsync("WelcomeMessage", new object[] { new string[] { "Hello I am NCDC Bot", "Here to help you assess your COVID-19 risk factor and know if you need to contact the NCDC.", "Please note that I am an assessment tool and should not be used for diagnostic purposes", "Let’s begin when you are ready" }, Questions[0] });
+            Clients.Client(Context.ConnectionId).SendCoreAsync("WelcomeMessage", new object[] { new string[] { "Hello I am NCDC Bot powered by GloEpid", "Here to help you assess your COVID-19 risk factor and know if you need to contact the NCDC.", "Please note that I am an assessment tool and should not be used for diagnostic purposes", "Let’s begin when you are ready" }, Questions[0] });
         
             return System.Threading.Tasks.Task.CompletedTask;
         }
@@ -37,6 +36,13 @@ namespace GloEpidBot
         {
             if (channel != null)
                 Context.Items.Add("channel", channel);
+            return System.Threading.Tasks.Task.CompletedTask;
+        }
+
+        public async System.Threading.Tasks.Task<System.Threading.Tasks.Task> ProvideLocation(double longitude, double latitude)
+        {
+            string location  = await BingCalls.GetLocation(longitude, latitude);
+            Context.Items.Add("location", location);
             return System.Threading.Tasks.Task.CompletedTask;
         }
         public async System.Threading.Tasks.Task<System.Threading.Tasks.Task> SendResponse(string[] answers, string message, int QuestionId, int NextQuestionId)
@@ -125,7 +131,7 @@ namespace GloEpidBot
                         if (answers.Length > 0)//Check if response was returned 
                         {
 
-                            if (QuestionId == 7) //If question is symptoms
+                            if (QuestionId == 10) //If question is symptoms
                             {
                                
                                 string Symptoms = String.Empty;
@@ -145,12 +151,21 @@ namespace GloEpidBot
                                 return System.Threading.Tasks.Task.CompletedTask;
 
                             }
+                            else if(QuestionId == 5 || QuestionId == 6 || QuestionId == 7)
+                            {
+                                string ContactForms = String.Empty;
+                                foreach(var item in answers)
+                                {
+                                    ContactForms = ContactForms + "," + item;
+                                }
+                                Context.Items.TryAdd("contactforms", ContactForms);
+                            }
                            
                             else
                             {
                                 // answers[0] retrieve answer for report
 
-                                if (QuestionId == 3)
+                                if (QuestionId == 2)
                                 {
                                     Context.Items.TryAdd("istravelled", answers[0]);
                                 }
@@ -160,7 +175,7 @@ namespace GloEpidBot
                                     Context.Items.TryAdd("age", answers[0]);
                                 }
             
-                                else if (QuestionId == 9)
+                                else if (QuestionId == 12)
                                 {
                                    
 
@@ -171,7 +186,7 @@ namespace GloEpidBot
                                 }
 
 
-                                else if (QuestionId == 4)
+                                else if (QuestionId == 3)
                                 {
 
 
@@ -181,7 +196,7 @@ namespace GloEpidBot
 
                                 }
 
-                                else if (QuestionId == 5)
+                                else if (QuestionId == 8)
                                 {
                                     Context.Items.TryAdd("closecontactnigeria", answers[0]);
                                     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Okay", Questions[NextQuestionId] });
@@ -189,7 +204,7 @@ namespace GloEpidBot
 
                                     return System.Threading.Tasks.Task.CompletedTask;
                                 }
-                                else if (QuestionId == 6)
+                                else if (QuestionId == 9)
                                 {
                                     Context.Items.TryAdd("contactsick", answers[0]);
                                    
@@ -197,7 +212,7 @@ namespace GloEpidBot
 
                                     return System.Threading.Tasks.Task.CompletedTask;
                                 }
-                                else if (QuestionId == 10)
+                                else if (QuestionId == 13)
                                 {
                                     Context.Items.TryAdd("publicplaces", answers[0]);
                                        
@@ -206,6 +221,13 @@ namespace GloEpidBot
                                         return System.Threading.Tasks.Task.CompletedTask;
                                    
                                    
+                                }
+                                else if(QuestionId == 4)
+                                {
+                                    Context.Items.TryAdd("contacttype", answers[0]);
+                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
+
+                                    return System.Threading.Tasks.Task.CompletedTask;
                                 }
                                 
 
@@ -217,7 +239,6 @@ namespace GloEpidBot
                             //Resend question, No answers sent
 
                             await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "OOps, didn't catch that, come again?!", Questions[QuestionId] });
-                          //  await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, Questions[QuestionId] });
                             return System.Threading.Tasks.Task.CompletedTask;
                         }
 
@@ -225,45 +246,8 @@ namespace GloEpidBot
                     else
                     {
 
-                        //send to LUIS
-
-
-                        if (QuestionId == 2)
-                        {
-                          //TODO : Check location with bing api
-                          if(answers.Length == 0)
-                            {
-                                string r = BingCalls.ValidateLocation(message);
-                                if (r != "false")
-                                {
-
-                                    Context.Items.TryAdd("location", r);
-                             
-                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
-                                    return System.Threading.Tasks.Task.CompletedTask;
-                                }
-                                else
-                                {
-                                    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "please use this format Area,State", Questions[QuestionId] });
-                               //     await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, Questions[QuestionId] });
-                                    return System.Threading.Tasks.Task.CompletedTask;
-                                }
-                              
-                            }
-                            else
-                            {
-                                double longitude, latitude;
-                                double.TryParse(answers[0], out longitude);
-                                double.TryParse(answers[1], out latitude);
-
-                                string location  = await BingCalls.GetLocation(longitude, latitude);
-                                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { location, Questions[NextQuestionId] });
-                            }
-                            
                         
-                         
-                        }
-                        else if (QuestionId == 8)
+                        if (QuestionId == 11)
                         {
                             string response = BingCalls.ValidateDate(message);
                             if (response != "Date format not recognized, Try again" && response != "Date format not recognized, Try again")
@@ -282,34 +266,7 @@ namespace GloEpidBot
                           
                         }
                       
-                        else if(QuestionId == 12)
-                        {
-                           
-                            if(Luiscalls.IsPhoneNumber(message))
-                            {
-                                Context.Items.TryAdd("phone", message);
-                         
-                                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
-                                return System.Threading.Tasks.Task.CompletedTask;
-                            }
-                            else
-                            {
-                               
-                                await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { "Didn't get that, try again?", Questions[NextQuestionId] });
-                            //    await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[QuestionId].quest, Questions[QuestionId] });
-                                return System.Threading.Tasks.Task.CompletedTask;
-                            }
-                           
-                        }
-                        else if (QuestionId == 13)
-                        {
-
-                            Context.Items.TryAdd("homeaddress", message);
-                     
-                            await Clients.Client(Context.ConnectionId).SendCoreAsync("ReceiveResponse", new object[] { Questions[NextQuestionId].quest, Questions[NextQuestionId] });
-                            return System.Threading.Tasks.Task.CompletedTask;
-                        }
-
+                       
 
 
 
@@ -347,11 +304,6 @@ namespace GloEpidBot
                             }
 
                         }
-
-                     
-
-                     
-
 
                         else
                         {
@@ -394,6 +346,8 @@ namespace GloEpidBot
         {
             object symptoms = string.Empty, istravelled = string.Empty, age = string.Empty, selfisolating = string.Empty, closecontactcorona = string.Empty, closecontactnigeria = string.Empty, contactsick = string.Empty, publicplaces = string.Empty, location = string.Empty, symptomstart = string.Empty, phone = string.Empty, homeaddress = string.Empty, name = string.Empty, risklevel = string.Empty;
             object channel = string.Empty;
+            object contactforms = string.Empty;
+            object contacttype = string.Empty;
             Context.Items.TryGetValue("risklevel", out risklevel);
             Context.Items.TryGetValue("symptoms", out symptoms);
             Context.Items.TryGetValue("istravelled", out istravelled);
@@ -404,10 +358,11 @@ namespace GloEpidBot
             Context.Items.TryGetValue("publicplaces", out publicplaces);
             Context.Items.TryGetValue("location", out location);
             Context.Items.TryGetValue("symptomstart", out symptomstart);
-            Context.Items.TryGetValue("phone", out phone);
-            Context.Items.TryGetValue("home", out homeaddress);
             Context.Items.TryGetValue("name", out name);
             Context.Items.TryGetValue("channel", out channel);
+            Context.Items.TryGetValue("contactforms", out contactforms);
+            Context.Items.TryGetValue("contacttype", out contacttype);
+
 
             List<AssessmentResponsesModel> questions = new List<AssessmentResponsesModel>()
            {
@@ -461,22 +416,21 @@ namespace GloEpidBot
                 },
                 new AssessmentResponsesModel
                 {
-                     question = "when did the symptoms start? (day/month) - (01/10)",
+                     question = "when did the symptoms start?",
                       response = symptomstart == null ? "" : symptomstart.ToString(),
 
                 },
                 new AssessmentResponsesModel
                 {
-                     question = "Kindly provide your phone number",
-                      response = phone == null ? "" : phone.ToString(),
-
+                     question = "What kind of contact have you had with a confirmed case of coronavirus (COVID-19)",
+                      response = contacttype == null ? "" : contacttype.ToString(),
                 },
-                new AssessmentResponsesModel
+                 new AssessmentResponsesModel
                 {
-                     question = "Kindly provide your  contact address",
-                      response = homeaddress == null ? "" : homeaddress.ToString(),
-
+                     question = "Forms of contact",
+                      response = contactforms == null ? "" : contactforms.ToString(),
                 }
+
            };
             string RiskLevel = risklevel == null ? "" : risklevel.ToString();
             string state = location == null ? "" : location.ToString();
@@ -492,13 +446,14 @@ namespace GloEpidBot
         public int calculate()
         {
             object travelhistory = string.Empty, symptoms =string.Empty, closecontact = string.Empty, location =  string.Empty, contactsick = string.Empty;
-
+            object contacttype = string.Empty;
             Context.Items.TryGetValue("closecontactcorona", out closecontact);
             Context.Items.TryGetValue("istravelled", out travelhistory);
             Context.Items.TryGetValue("contactsick", out contactsick);
             Context.Items.TryGetValue("location", out location);
             Context.Items.TryGetValue("symptoms", out symptoms);
-            if(contactsick == null)
+            Context.Items.TryGetValue("contacttype", out contacttype);
+            if (contactsick == null)
             {
                 contactsick = string.Empty;
             }
@@ -513,12 +468,12 @@ namespace GloEpidBot
                 Context.Items.TryAdd("risklevel", "high");
                 return 2;
 
-            }else if(closecontact.ToString() == "Yes" && (symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
+            }else if(closecontact.ToString() == "Yes" && (contacttype.ToString().Contains("Personal Contact and Accomodation") || contacttype.ToString().Contains("Medical and Healthcare") ) && (symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
             {
                 Context.Items.TryAdd("risklevel", "high");
                 return 2;
             }
-            else if((symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")) && (location.ToString().Contains("Lagos")|| location.ToString().Contains("Oyo")|| location.ToString().Contains("FCT") || location.ToString().Contains("Osun")|| location.ToString().Contains("Kastina")|| location.ToString().Contains("Abuja")|| location.ToString().Contains("Ogun"))) {
+            else if((symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")) && (location.ToString().Contains("Lagos")|| location.ToString().Contains("Oyo")|| location.ToString().Contains("FCT") || location.ToString().Contains("Osun")|| location.ToString().Contains("Kastina")|| location.ToString().Contains("Abuja")|| location.ToString().Contains("Ogun") || location.ToString().Contains("Edo")|| location.ToString().Contains("Kano") || location.ToString().Contains("Kwara") || location.ToString().Contains("Kaduna") || location.ToString().Contains("Akwa Ibom"))) {
                 Context.Items.TryAdd("risklevel", "high");
                 return 2;
             }
@@ -528,7 +483,7 @@ namespace GloEpidBot
                 Context.Items.TryAdd("risklevel", "medium");
                 return 1;
             }
-            else if(closecontact.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms"))
+            else if(closecontact.ToString() == "Yes" && symptoms.ToString().Contains("None of the symptoms") && contacttype.ToString().Contains("Social interaction"))
             {
                 Context.Items.TryAdd("risklevel", "medium");
                 return 1;

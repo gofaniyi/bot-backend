@@ -1,5 +1,4 @@
 ﻿using GloEpidBot.Model.Domain;
-using GloEpidBot.Persistence.Contexts;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
