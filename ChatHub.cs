@@ -461,6 +461,12 @@ namespace GloEpidBot
             {
                 closecontact = string.Empty;
             }
+            if(location == null)
+            {
+                location = string.Empty;
+            }
+            if (contacttype == null)
+                contacttype = string.Empty;
 
             if (travelhistory != null && travelhistory.ToString() != "No" && (symptoms.ToString().Contains("Cough") || symptoms.ToString().Contains("Difficulty in breathing") || symptoms.ToString().Contains("Fever")))
             {

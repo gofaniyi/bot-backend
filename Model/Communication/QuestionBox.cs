@@ -39,8 +39,8 @@ namespace GloEpidBot.Model.Domain
                     QuestionId = 2,
                     HasOptions =true,
                     quest = "Have you travelled (either inter-state or outside the country) in the last 30 days? ",
-                    optionsNextId = "7,4".Split(','),
-                    NextQuestionYes = 7,
+                    optionsNextId = "10,3".Split(','),
+                    NextQuestionYes = 10,
                     NextQuestionNo = 3,
                     options = "Yes,No".Split(',')
                 },
@@ -74,9 +74,9 @@ namespace GloEpidBot.Model.Domain
                      IsMultipleChoice = true,
                      quest = "Personal Contact (please select all that apply and press send)",
                      options = "Greater than 15 minutes face-to-face (<2 meters distance) direct physical contact with a probable or confirmed case,Living or sleeping in the same home with confirmed COVID-19 case,Shared accommodation sharing kitchen or bathroom facilities with confirmed case,Spouse or sexual partner of confirmed case,Infant/child of a positive COVID-19 Mother,Commuter/passenger sitting within 5 feet (in any direction) of the COVID-19 case in a tricycle vehicle airplane train or ship, none of the above".Split(','),
-                     optionsNextId = "7,7,7,7,7,7,7".Split(','),
-                     NextQuestionYes = 7,
-                     NextQuestionNo = 7
+                     optionsNextId = "10,10,10,10,10,10,10".Split(','),
+                     NextQuestionYes = 10,
+                     NextQuestionNo = 10
                  },
                  new question
                  {
@@ -84,10 +84,10 @@ namespace GloEpidBot.Model.Domain
                      HasOptions = true,
                      IsMultipleChoice = true,
                      quest = "Medical and Healthcare (please select all that apply and press send)",
-                     options = "Cared for a probable or confirmed COVID-19 case including care for dead body,healthcare worker who has had direct contact with a confirmed case,healthcare worker who has either not worn appropriate PPE or had a breach in PPE while in contact with confirmed case,laboratory staff who have handled specimens of suspected cases unprotected or has a breach of laboratory containment while handling specimens?,been involved in emergency/exposure prone procedures including surgery/CPR/ intubation /suctioning on confirmed cases and without use of appropriate PPE, none of the above".Split(','),
-                     optionsNextId = "7,7,7,7,7,7,7".Split(','),
-                     NextQuestionYes = 7,
-                     NextQuestionNo = 7
+                     options = "Cared for a probable or confirmed COVID-19 case including care for dead body,healthcare worker who has had direct contact with a confirmed case,healthcare worker who has either not worn appropriate PPE or had a breach in PPE while in contact with confirmed case,laboratory staff who have handled specimens of suspected cases unprotected or has a breach of laboratory containment while handling specimens?,Been involved in emergency/exposure prone procedures including surgery/CPR/ intubation /suctioning on confirmed cases and without use of appropriate PPE, none of the above".Split(','),
+                     optionsNextId = "10,10,10,10,10,10,10".Split(','),
+                     NextQuestionYes = 10,
+                     NextQuestionNo = 10
                  },
                  new question
                  {
@@ -96,9 +96,9 @@ namespace GloEpidBot.Model.Domain
                      quest = "Social interaction (please select all that apply and press send)",
                      IsMultipleChoice = true,
                      options = "social/religious gatherings e.g. weddings, burials,Church and Mosque services with a probable or confirmed Covid-19 case,Are you living in the same building (Not same home) with a probable or confirmed Covid-19 case without sharing kitchen or bathroom facilities,None of the above".Split(','),
-                     optionsNextId = "7,7,7,7,7,7,7".Split(','),
-                     NextQuestionYes = 7,
-                     NextQuestionNo = 7
+                      optionsNextId = "10,10,10,10,10,10,10".Split(','),
+                     NextQuestionYes = 10,
+                     NextQuestionNo = 10
 
                  },
                   new question
