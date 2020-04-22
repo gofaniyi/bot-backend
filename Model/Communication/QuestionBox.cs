@@ -129,7 +129,7 @@ namespace GloEpidBot.Model.Domain
                     QuestionId = 10,
                     HasOptions =true,
                     quest = "Have you been experiencing any of the following (Select all that apply and press send)",
-                    optionsNextId = "11,11,11,11,11,35".Split(','),
+                    optionsNextId = "11,11,11,11,11,11".Split(','),
                     NextQuestionYes = 11,
                     NextQuestionNo = 35,
                     options = "Difficulty in breathing,fatigue/tiredness,Sore throat,Dry Cough,Fever > 37.8 C,None of the symptoms".Split(','),
