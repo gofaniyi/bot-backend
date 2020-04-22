@@ -23,12 +23,13 @@ namespace GloEpidBot
 
 
         override
-      public System.Threading.Tasks.Task OnConnectedAsync()
+      public  System.Threading.Tasks.Task OnConnectedAsync()
         {
 
 
             Clients.Client(Context.ConnectionId).SendCoreAsync("WelcomeMessage", new object[] { new string[] { "Hello I am NCDC Bot powered by GloEpid", "Here to help you assess your COVID-19 risk factor and know if you need to contact the NCDC.", "Please note that I am an assessment tool and should not be used for diagnostic purposes", "Let’s begin when you are ready" }, Questions[0] });
         
+
             return System.Threading.Tasks.Task.CompletedTask;
         }
 
@@ -47,9 +48,9 @@ namespace GloEpidBot
         }
         public async System.Threading.Tasks.Task<System.Threading.Tasks.Task> SendResponse(string[] answers, string message, int QuestionId, int NextQuestionId)
         {
+            string location = await BingCalls.GetLocation(7.3043, 5.1370);
+            Context.Items.TryAdd("location", location);
 
-
-           
             if (NextQuestionId == 35)
             {
                 Context.Items.Add("home", message);

@@ -32,15 +32,14 @@ namespace GloEpidBot.Utilities
 
             var response = await req.Execute();
 
-            if (response != null &&
-      response.ResourceSets != null &&
-      response.ResourceSets.Length > 0 &&
-      response.ResourceSets[0].Resources != null &&
-      response.ResourceSets[0].Resources.Length > 0)
+            if (response != null &&response.ResourceSets != null &&response.ResourceSets.Length > 0 &&response.ResourceSets[0].Resources != null &&
+                response.ResourceSets[0].Resources.Length > 0)
             {
                 var result = response.ResourceSets[0].Resources[0] as BingMapsRESTToolkit.Location;
+                string state = result.Address.AdminDistrict;
+                
 
-                return result.Name;
+                return state;
             }
             else
             {
