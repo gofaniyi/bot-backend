@@ -19,6 +19,7 @@
         "LUIS_ENDPOINT_NAME": "https://westus.api.cognitive.microsoft.com",
         "ACCESS_TOKEN": "GEPEE21284300AAF045F3097E40D692F998059D",
         "DATABASE_API_URL": "https://staging-api-ncdc-dashboard.azurewebsites.net",
+        "ALLOWED_ORIGINS": "https://gloepid.org,http://127.0.0.1:3000,http://localhost:3000,https://gloepid-production.netlify.app,https://gloepid.netlify.app",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "BING_API_KEY": "Are9CBi7r7JaLuQJY6dTT8ESZqPljtO0OVK0nHSXdwu14MP1BG4DweZo3DF-FoyE"
       }
