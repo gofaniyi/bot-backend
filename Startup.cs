@@ -32,16 +32,17 @@ namespace GloEpidBot
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-       // readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+      
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddSignalR();
-            
-          
 
-            services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins("https://gloepid.org", "http://127.0.0.1:3000","http://localhost:3000", "https://gloepid-production.netlify.app", "https://gloepid.netlify.app").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
-            //services.AddCors(o => o.AddPolicy("All", b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+            string[] origins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS").Split(",");
+
+
+            services.AddCors(o => o.AddPolicy("All", b => b.WithOrigins(origins).AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+           
             services.AddOptions();
        
             

@@ -27,13 +27,25 @@ namespace GloEpidBot.Utilities
                 LocationCode = statesCode[i];
 
             }
-               
 
+            /*
+              TECHNICAL DEBT
+              1.
+             
+             */
 
-
-            var AssData = new AssessmentModel
+            List<AssessmentResponsesModel> ResponseBox = new List<AssessmentResponsesModel>();
+            foreach (var item in questions)
             {
-                assessmentResponses = questions,
+                if (item.response != "")
+                    ResponseBox.Add(item);
+            }
+
+
+
+                var AssData = new AssessmentModel
+            {
+                assessmentResponses = ResponseBox,
                 createdAt = DateTime.Now,
                 phoneNumber = Phone,
                 symptoms = symptoms,
@@ -42,6 +54,9 @@ namespace GloEpidBot.Utilities
                 location = homeAddress
                
             };
+
+           
+
             if (RiskLevel.ToLower() == "high")
                 AssData.assessmentResult = AssessmentStatus.HighRisk;
             else if (RiskLevel.ToLower() == "medium")
@@ -54,8 +69,9 @@ namespace GloEpidBot.Utilities
             else if (Channel.ToLower() == "web")
                 AssData.assessmentChannel = Utilities.Channel.Web;
 
-
+           
             var myContent = JsonConvert.SerializeObject(AssData);
+            Console.WriteLine(myContent);
             var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
             var byteContent = new ByteArrayContent(buffer);
            

@@ -137,7 +137,7 @@ namespace GloEpidBot
                                 string Symptoms = String.Empty;
                                 foreach (var item in answers)
                                 {
-                                    Symptoms = Symptoms + "," + item;
+                                    Symptoms += item + ",";
                                 }
                                 Context.Items.TryAdd("symptoms", Symptoms);
                              //   Context.Items.Add("symptoms", Symptoms);

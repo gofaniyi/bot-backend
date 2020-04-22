@@ -21,7 +21,7 @@ namespace GloEpidBot.Utilities
 
             client.BaseAddress = new Uri(DATABASE_API_URL);
             client.DefaultRequestHeaders.Accept.Clear();
-            //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
+            
             try
             {
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
