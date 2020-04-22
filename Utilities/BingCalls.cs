@@ -11,7 +11,7 @@ namespace GloEpidBot.Utilities
     {
         private static string APIKEY = Environment.GetEnvironmentVariable("BING_API_KEY");
 
-        public static async Task<string> GetLocation(double longitude, double latitude)
+        public static async Task<string> GetLocation(double longitude = 7.3043, double latitude = 5.1370)
         {
            
 

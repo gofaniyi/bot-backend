@@ -46,10 +46,22 @@ namespace GloEpidBot
             Context.Items.Add("location", location);
             return System.Threading.Tasks.Task.CompletedTask;
         }
+
+        public  System.Threading.Tasks.Task ProvidePhone(string phone)
+        {
+            Luiscalls.IsPhoneNumber(phone);
+            Context.Items.Add("phone", phone);
+            return System.Threading.Tasks.Task.CompletedTask;
+        }
+
+
+
+
+
+
         public async System.Threading.Tasks.Task<System.Threading.Tasks.Task> SendResponse(string[] answers, string message, int QuestionId, int NextQuestionId)
         {
-            string location = await BingCalls.GetLocation(7.3043, 5.1370);
-            Context.Items.TryAdd("location", location);
+           
 
             if (NextQuestionId == 35)
             {

@@ -18,6 +18,9 @@ namespace GloEpidBot.Utilities
 
         public static async Task SendToNCDCAsync(List<AssessmentResponsesModel> questions, string RiskLevel, string Channel, string State, string Phone, string[] symptoms, string FullName, string homeAddress)
         {
+
+           
+
             var statesCode = "NG-FC,NG-FC,NG-FC,NG-FC,NG-FC,NG-AB,NG-AD,NG-AK,NG-AN,NG-BA,NG-BY,NG-BE,NG-BO,NG-CR,NG-DE,NG-EB,NG-ED,NG-EK,NG-EN,NG-GO,NG-IM,NG-JI,NG-KD,NG-KN,NG-KT,NG-KE,NG-KO,NG-KW,NG-LA,NG-NA,NG-NI,NG-OG,NG-ON,NG-OS,NG-OY,NG-PL,NG-RI,NG-SO,NG-TA,NG-YO,NG-ZA".Split(',');
             var states = "FCT Abuja,Abuja FCT,Federal Capital Territory,FCT,Abuja,Abia,Adamawa,Akwa Ibom,Anambra,Bauchi,Bayelsa,Benue,Borno,Cross River,Delta,Ebonyi,Edo,Ekiti,Enugu,Gombe,Imo,Jigawa,Kaduna,Kano,Katsina,Kebbi,Kogi,Kwara,Lagos,Nasarawa,Niger,Ogun,Ondo,Osun,Oyo,Plateau,Rivers,Sokoto,Taraba,Yobe,Zamfara".Split(',');
             string LocationCode = string.Empty;
@@ -91,7 +94,7 @@ namespace GloEpidBot.Utilities
         public string phoneNumber { get; set; }
         public string [] symptoms { get; set; }
         public string fullName { get; set; }
-        public string email { get; set; } = "taiwo.insight@gmail.com";
+        public string email { get; set; } = "example@gloepid.com";
         public string stateCode { get; set; }
 
     }
