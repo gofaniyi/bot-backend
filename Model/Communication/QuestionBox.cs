@@ -18,7 +18,7 @@ namespace GloEpidBot.Model.Domain
                      QuestionId = 0,
                      HasOptions = false,
                      optionsNextId = "1".Split(','),
-                     quest = "What is your Full name",
+                     quest = "What is your Full name?",
                      NextQuestionYes = 1,
                      IsMultipleChoice = false
 
@@ -38,7 +38,7 @@ namespace GloEpidBot.Model.Domain
                 {
                     QuestionId = 2,
                     HasOptions =true,
-                    quest = "Have you travelled (either inter-state or outside the country) in the last 30 days? ",
+                    quest = "Have you travelled (either inter-state or outside the country) in the last 30 days?",
                     optionsNextId = "10,3".Split(','),
                     NextQuestionYes = 10,
                     NextQuestionNo = 3,
@@ -60,7 +60,7 @@ namespace GloEpidBot.Model.Domain
                  {
                      QuestionId = 4,
                      HasOptions = true,
-                     quest = "What kind of contact have you had",
+                     quest = "What kind of contact have you had?",
                      IsMultipleChoice = false,
                      optionsNextId = "5,6,7".Split(','),
                      options = "Personal Contact and Accomodation,Medical and Healthcare,Social interaction".Split(','),
@@ -105,7 +105,7 @@ namespace GloEpidBot.Model.Domain
                  {
                     QuestionId = 8,
                     HasOptions =true,
-                    quest = "Have you been in contact with someone who just arrived in Nigeria in the last 14 days? ",
+                    quest = "Have you been in contact with someone who just arrived in Nigeria in the last 14 days?",
                     optionsNextId = "9,10,10".Split(','),
                     NextQuestionYes = 9,
                     NextQuestionNo = 10,
@@ -128,11 +128,11 @@ namespace GloEpidBot.Model.Domain
                  {
                     QuestionId = 10,
                     HasOptions =true,
-                    quest = "Have you been experiencing any of the following (Select all that apply and press send)",
+                    quest = "Have you been experiencing any of the following? (Select all that apply and press send)",
                     optionsNextId = "11,11,11,11,11,11".Split(','),
                     NextQuestionYes = 11,
                     NextQuestionNo = 35,
-                    options = "Difficulty in breathing,fatigue/tiredness,Sore throat,Dry Cough,Fever > 37.8 C,None of the symptoms".Split(','),
+                    options = "Difficulty in breathing,Fatigue/tiredness,Sore throat,Dry Cough,Fever > 37.8 C,None of the symptoms".Split(','),
                     IsMultipleChoice = true
 
                  },
@@ -141,7 +141,7 @@ namespace GloEpidBot.Model.Domain
                    {
                        QuestionId = 11,
                        HasOptions =false,
-                       quest = "when did the symptoms start?",
+                       quest = "When did the symptoms start?",
                        optionsNextId = "12".Split(','),
                        NextQuestionNo = 12,
                        NextQuestionYes = 12
