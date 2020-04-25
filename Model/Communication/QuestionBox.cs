@@ -63,8 +63,8 @@ namespace GloEpidBot.Model.Domain
                      quest = "What kind of contact have you had?",
                      IsMultipleChoice = false,
                      optionsNextId = "5,6,7".Split(','),
-                     options = "Personal Contact and Accomodation,Medical and Healthcare,Social interaction".Split(','),
-                   
+                     options = "Personal Contact and Accommodation,Medical and Healthcare,Social interaction".Split(','),
+
 
                  },
                  new question
@@ -128,7 +128,7 @@ namespace GloEpidBot.Model.Domain
                  {
                     QuestionId = 10,
                     HasOptions =true,
-                    quest = "Have you been experiencing any of the following? (Select all that apply and press send)",
+                    quest = "Have you been experiencing any of the following? (select all that apply and press send)",
                     optionsNextId = "11,11,11,11,11,11".Split(','),
                     NextQuestionYes = 11,
                     NextQuestionNo = 35,
