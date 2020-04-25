@@ -18,7 +18,7 @@ namespace GloEpidBot.Model.Domain
                      QuestionId = 0,
                      HasOptions = false,
                      optionsNextId = "1".Split(','),
-                     quest = "What is your Full name?",
+                     quest = "What is your full name?",
                      NextQuestionYes = 1,
                      IsMultipleChoice = false
 
