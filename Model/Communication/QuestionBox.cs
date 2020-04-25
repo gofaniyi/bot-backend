@@ -132,7 +132,7 @@ namespace GloEpidBot.Model.Domain
                     optionsNextId = "11,11,11,11,11,11".Split(','),
                     NextQuestionYes = 11,
                     NextQuestionNo = 35,
-                    options = "Difficulty in breathing,Fatigue/tiredness,Sore throat,Dry Cough,Fever > 37.8 C,None of the symptoms".Split(','),
+                    options = "Difficulty in breathing,Fatigue or Tiredness,Sore throat,Dry cough,Fever > 37.8 C,None of the symptoms".Split(','),
                     IsMultipleChoice = true
 
                  },
