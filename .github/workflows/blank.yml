@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-    - staging/mobile
+    - deploy_staging_mobile
 
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
     - name: Build and deploy the Docker image
       env: 
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        APP_NAME: ${{ 'staging-ncdc-bot-mobile' }}
+        APP_NAME: ${{ 'sample-bot-backend' }}
       run: |
         cd ./
         docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
